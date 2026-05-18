@@ -1,0 +1,353 @@
+# ====================================================
+# Clash Verge Rev (Mihomo) 独立订阅全局增强覆写模板 (Merge)
+# ====================================================
+
+# ----------------------------------------------------
+# 1. 基础运行模式与网络设定
+# ----------------------------------------------------
+mode: rule                  
+mixed-port: 7897            
+allow-lan: false            
+log-level: warning            
+ipv6: true                  
+unified-delay: true         
+bind-address: '*'           
+tcp-concurrent: true        
+keep-alive-interval: 15     
+
+# ----------------------------------------------------
+# 2. 控制台通信与跨域白名单 (用于 Yacd 等 Web 面板)
+# ----------------------------------------------------
+external-controller: 127.0.0.1:9097               
+secret: '123456'
+external-controller-pipe: \\.\pipe\verge-mihomo   
+external-controller-cors:                         
+  allow-private-network: true                     
+  allow-origins:                                  
+    - tauri://localhost
+    - http://tauri.localhost
+    - https://yacd.metacubex.one
+    - http://yacd.metacubex.one
+    - https://metacubex.github.io
+    - http://metacubex.github.io
+
+# ----------------------------------------------------
+# 3. GeoData 数据库设置 (用于精准判断 IP 和域名归属)
+# ----------------------------------------------------
+geodata-mode: true          
+geo-auto-update: true       
+geo-update-interval: 24     
+geox-url:                   
+  geoip: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
+
+# ----------------------------------------------------
+# 4. TUN 虚拟网卡模式 (底层接管电脑全部流量)
+# ----------------------------------------------------
+tun:
+  enable: true                 
+  auto-detect-interface: true  
+  auto-route: true             
+  device: Mihomo               
+  dns-hijack:                  
+    - any:53
+  mtu: 1400                    
+  route-exclude-address: []    
+  stack: mixed                 
+  strict-route: true  
+  endpoint-independent-nat: true
+# ----------------------------------------------------
+# X. 流量嗅探 (破解 APP 直连 IP 导致的分流失效)
+# ----------------------------------------------------
+sniffer:
+  enable: true
+  parse-pure-ip: true             # 核心：尝试反向解析纯 IP 连接
+  override-destination: true      # 核心：用嗅探到的真实域名替换掉原来的 IP
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    QUIC:
+      ports: [443]
+  force-domain:
+    - "+.netflix.com"
+    - "+.nflxvideo.net"
+    - "+.amazonaws.com"
+    - "+.media.dssott.com"
+    - "+.tiktok.com"
+  skip-domain:
+    - Mijia Cloud
+    - dlg.io.mi.com
+    - "+.oray.com"
+    - "+.sunlogin.net"
+    - "+.push.apple.com"
+
+# ----------------------------------------------------
+# 5. DNS 防泄漏与 Fake-IP 解析核心
+# ----------------------------------------------------
+dns:
+  enable: true
+  ipv6: true
+  enhanced-mode: fake-ip       
+  listen: 0.0.0.0:53                  
+  default-nameserver:          
+    - system
+    - 223.6.6.6
+    - 8.8.8.8
+    - 2400:3200::1
+    - 2001:4860:4860::8888
+  nameserver:                  
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  proxy-server-nameserver:     
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+    - tls://223.5.5.5
+  direct-nameserver: []
+  direct-nameserver-follow-policy: false
+  fake-ip-range: 198.18.0.1/16 
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:              
+    - '*.lan'
+    - '*.local'
+    - '*.arpa'
+    - time.*.com
+    - ntp.*.com
+    - +.market.xiaomi.com
+    - localhost.ptlogin2.qq.com
+    - '*.msftncsi.com'
+    - www.msftconnecttest.com
+  fallback: []                 
+  fallback-filter:             
+    geoip: true
+    geoip-code: CN
+    domain:
+      - +.google.com
+      - +.facebook.com
+      - +.youtube.com
+    ipcidr:
+      - 240.0.0.0/4
+      - 0.0.0.0/32
+  prefer-h3: false             
+  respect-rules: false
+  use-hosts: false
+  use-system-hosts: false
+
+# ----------------------------------------------------
+# 6. UI 行为与持久化缓存
+# ----------------------------------------------------
+profile:
+  store-selected: true         
+  store-fake-ip: true          
+
+# ----------------------------------------------------
+# 7. 代理组 (极简嵌套架构 - The Masterpiece)
+# ----------------------------------------------------
+proxy-groups:
+  # === 1. 顶层面板 (只留三个，极度清爽) ===
+  - name: PROXY
+    type: select
+    proxies:
+      - 🛡️ 稳定首选
+      - 🚀 手动切换
+      - 🤖 AI 专区
+      - 🎯 全局直连
+
+  # === 2. AI 专属 (保持不变) ===
+  - name: 🤖 AI 专区
+    type: select
+    proxies:
+      - 🇺🇸 美国专区
+      - 🇯🇵 日本专区
+      - 🇸🇬 新加坡专区
+      - 🇹🇼 台湾专区
+
+  # === 3. 终极主路由：区域故障转移 ===
+  - name: 🛡️ 稳定首选
+    type: fallback
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - 🇭🇰 香港专区      
+      - 🇯🇵 日本专区      
+      - 🇸🇬 新加坡专区    
+      - 🇹🇼 台湾专区
+      - 🇺🇸 美国专区
+
+  # === 4. 手动面板 ===
+  - name: 🚀 手动切换
+    type: select
+    proxies:
+      - 🇭🇰 香港专区
+      - 🇹🇼 台湾专区
+      - 🇯🇵 日本专区
+      - 🇸🇬 新加坡专区
+      - 🇺🇸 美国专区
+      - 🌍 其他地区
+
+  # === 5. 地区自动测速===
+  - name: 🇭🇰 香港专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)🇭🇰|HK|香港|HongKong"
+
+  - name: 🇹🇼 台湾专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)🇹🇼|TW|台湾|Taiwan"
+
+  - name: 🇯🇵 日本专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)🇯🇵|JP|日本|Japan"
+
+  - name: 🇸🇬 新加坡专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)🇸🇬|SG|新加坡|Singapore"
+
+  - name: 🇺🇸 美国专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)🇺🇸|US|美国|America"
+
+  - name: 🌍 其他地区
+    type: select
+    include-all: true
+    exclude-filter: "(?i)🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|HK|TW|SG|JP|US|香港|台湾|新加坡|日本|美国|到期|通知|官网|剩余|流量|QQ群|TG群|更新|重置"
+
+  - name: 🎯 全局直连
+    type: select
+    proxies:
+      - DIRECT
+
+# ----------------------------------------------------
+# 8. 外部规则集拉取 (Loyalsoldier 强大去广告/分流库)
+# ----------------------------------------------------
+rule-providers:
+  reject:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt"
+    path: ./ruleset/reject.yaml
+    interval: 86400           
+  icloud:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/icloud.txt"
+    path: ./ruleset/icloud.yaml
+    interval: 86400
+  apple:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/apple.txt"
+    path: ./ruleset/apple.yaml
+    interval: 86400
+  google:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/google.txt"
+    path: ./ruleset/google.yaml
+    interval: 86400
+  proxy:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/proxy.txt"
+    path: ./ruleset/proxy.yaml
+    interval: 86400
+  direct:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt"
+    path: ./ruleset/direct.yaml
+    interval: 86400
+  private:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/private.txt"
+    path: ./ruleset/private.yaml
+    interval: 86400
+  gfw:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
+    path: ./ruleset/gfw.yaml
+    interval: 86400
+  tld-not-cn:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/tld-not-cn.txt"
+    path: ./ruleset/tld-not-cn.yaml
+    interval: 86400
+  telegramcidr:
+    type: http
+    behavior: ipcidr
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/telegramcidr.txt"
+    path: ./ruleset/telegramcidr.yaml
+    interval: 86400
+  cncidr:
+    type: http
+    behavior: ipcidr
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cncidr.txt"
+    path: ./ruleset/cncidr.yaml
+    interval: 86400
+  lancidr:
+    type: http
+    behavior: ipcidr
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt"
+    path: ./ruleset/lancidr.yaml
+    interval: 86400
+  applications:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
+    path: ./ruleset/applications.yaml
+    interval: 86400
+
+# ----------------------------------------------------
+# 9. 终极路由分流规则 (优先级从上到下)
+# ----------------------------------------------------
+rules:
+  - GEOSITE,openai,🤖 AI 专区
+  - GEOSITE,anthropic,🤖 AI 专区
+  - GEOSITE,google-gemini,🤖 AI 专区
+  # 应用与面板直连
+  - RULE-SET,applications,DIRECT
+  - DOMAIN,clash.razord.top,DIRECT
+  - DOMAIN,yacd.haishan.me,DIRECT
+  # 局域网直连与广告拦截
+  - RULE-SET,private,DIRECT
+  - RULE-SET,reject,REJECT
+  # 苹果与谷歌分流
+  - RULE-SET,icloud,DIRECT
+  - RULE-SET,apple,DIRECT
+  - RULE-SET,google,PROXY
+  # 代理与直连名单分流
+  - RULE-SET,proxy,PROXY
+  - RULE-SET,direct,DIRECT
+  # IP 段防泄漏处理 
+  - RULE-SET,lancidr,DIRECT,no-resolve
+  - RULE-SET,cncidr,DIRECT,no-resolve
+  - RULE-SET,telegramcidr,PROXY,no-resolve  
+  - GEOIP,LAN,DIRECT,no-resolve
+  - GEOIP,CN,DIRECT,no-resolve
+  # 漏网之鱼：不在以上所有规则内的流量，默认走代理
+  - MATCH,PROXY
