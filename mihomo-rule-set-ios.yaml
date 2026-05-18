@@ -1,0 +1,286 @@
+# ====================================================
+# Mihomo 极简黄金混合版 (结合二进制规则引擎)
+# ====================================================
+
+# ██████████████ 锚点区域 (借鉴的高级语法) ██████████████
+# 这里定义了二进制规则的模板，极大缩减代码量，不要修改这里
+rule-anchor:
+  domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
+  ipcidr: &ipcidr {type: http, interval: 86400, behavior: ipcidr, format: mrs}
+
+
+# ----------------------------------------------------
+# 1. 基础运行模式与网络设定
+# ----------------------------------------------------
+mode: rule
+mixed-port: 7890
+allow-lan: false
+log-level: warning
+ipv6: true
+unified-delay: true
+bind-address: '*'
+tcp-concurrent: true
+
+# ----------------------------------------------------
+# 3. TUN 虚拟网卡模式 (底层流量全面接管)
+# ----------------------------------------------------
+tun:
+  enable: true
+  auto-detect-interface: true
+  auto-route: true
+  device: Clash Mi
+  dns-hijack:
+    - "any:53"
+  mtu: 9000
+  route-exclude-address: []
+  stack: gVisor
+  strict-route: true
+
+# ----------------------------------------------------
+# 4. DNS 防泄漏与 Fake-IP 解析核心
+# ----------------------------------------------------
+dns:
+  enable: true
+  ipv6: true
+  enhanced-mode: fake-ip
+  listen: 0.0.0.0:53
+  default-nameserver:
+    - system
+    - 223.6.6.6
+    - 114.114.114.114
+    - 2400:3200::1
+    - 2001:4860:4860::8888
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  proxy-server-nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+    - tls://223.5.5.5
+  direct-nameserver: []
+  direct-nameserver-follow-policy: false
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - '*.arpa'
+    - time.*.com
+    - ntp.*.com
+    - +.market.xiaomi.com
+    - localhost.ptlogin2.qq.com
+    - '*.msftncsi.com'
+    - www.msftconnecttest.com
+  fallback: []
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    domain:
+      - +.google.com
+      - +.facebook.com
+      - +.youtube.com
+    ipcidr:
+      - 240.0.0.0/4
+      - 0.0.0.0/32
+  prefer-h3: false
+  respect-rules: false
+  use-hosts: false
+  use-system-hosts: false
+
+# ----------------------------------------------------
+# 5. UI 行为与持久化缓存
+# ----------------------------------------------------
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+# ----------------------------------------------------
+# 6. 代理组 (完全保留你的极简嵌套架构 - The Masterpiece)
+# ----------------------------------------------------
+proxy-groups:
+  # === 1. 顶层面板 (只留三个，极度清爽) ===
+  - name: PROXY
+    type: select
+    proxies:
+      - 🛡️ 稳定首选
+      - 🚀 手动切换
+      - 🤖 AI 专区
+      - 🎯 全局直连
+
+  # === 2. AI 专属 ===
+  - name: 🤖 AI 专区
+    type: select
+    proxies:
+      - 🇯🇵 日本专区
+      - 🇸🇬 新加坡专区
+      - 🇺🇸 美国专区
+      - 🇹🇼 台湾专区
+
+  # === 3. 终极主路由：区域故障转移 ===
+  - name: 🛡️ 稳定首选
+    type: fallback
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    proxies:
+      - 🇭🇰 香港专区      
+      - 🇯🇵 日本专区      
+      - 🇸🇬 新加坡专区    
+      - 🇹🇼 台湾专区
+      - 🇺🇸 美国专区
+
+  # === 4. 手动面板 ===
+  - name: 🚀 手动切换
+    type: select
+    proxies:
+      - 🇭🇰 香港专区
+      - 🇯🇵 日本专区
+      - 🇸🇬 新加坡专区
+      - 🇹🇼 台湾专区
+      - 🇺🇸 美国专区
+      - 🌍 其他地区
+
+  # === 5. 地区自动测速 (已加回懒人省电模式 lazy: true) ===
+  - name: 🇭🇰 香港专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)🇭🇰|HK|香港|HongKong"
+
+  - name: 🇹🇼 台湾专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)🇹🇼|TW|台湾|Taiwan"
+
+  - name: 🇯🇵 日本专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)🇯🇵|JP|日本|Japan"
+
+  - name: 🇸🇬 新加坡专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)🇸🇬|SG|新加坡|Singapore"
+
+  - name: 🇺🇸 美国专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)🇺🇸|US|美国|America"
+
+  - name: 🌍 其他地区
+    type: select
+    include-all: true
+    exclude-filter: "(?i)🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|HK|TW|SG|JP|US|香港|台湾|新加坡|日本|美国|到期|通知|官网|剩余|流量|QQ群|TG群|更新|重置"
+
+  - name: 🎯 全局直连
+    type: select
+    proxies:
+      - DIRECT
+
+# ----------------------------------------------------
+# 7. 嗅探功能 (精准识别流媒体与硬编码 IP)
+# ----------------------------------------------------
+sniffer:
+  enable: true
+  override-destination: true
+  parse-pure-ip: true
+  force-dns-mapping: true
+  sniff:
+    QUIC:
+      ports: [443]
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+  force-domain:
+    - "+.netflix.com"
+    - "+.nflxvideo.net"
+    - "+.amazonaws.com"
+    - "+.media.dssott.com"
+    - "+.tiktok.com"
+  skip-domain:
+    - "Mijia Cloud"
+    - dlg.io.mi.com
+    - "+.oray.com"
+    - "+.sunlogin.net"
+    - "+.push.apple.com"
+
+# ----------------------------------------------------
+# 8. 外部二进制规则库 (调用顶部的锚点)
+# ----------------------------------------------------
+rule-providers:
+  # 广告拦截
+  ads: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.mrs" }
+  # AI 专区
+  openai: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/openai.mrs" }
+  anthropic: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/anthropic.mrs" }
+  gemini: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google-gemini.mrs" }
+  # 国际社交与流媒体
+  youtube: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs" }
+  google: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs" }
+  telegram: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs" }
+  twitter: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs" }
+  netflix: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs" }
+  # 国内直连与防漏网兜底
+  apple: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs" }
+  private: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" }
+  cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs" }
+  geolocation-!cn: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs" }
+  # IP 数据
+  cn_ip: { <<: *ipcidr, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs" }
+  private_ip: { <<: *ipcidr, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs" }
+
+# ====================================================
+# 9. 黄金混合路由分流规则 (优先级自上而下严格匹配)
+# ====================================================
+rules:
+  # --- 阶段一：AI 专属定点分流 ---
+  - RULE-SET,openai,🤖 AI 专区
+  - RULE-SET,anthropic,🤖 AI 专区
+  - RULE-SET,gemini,🤖 AI 专区  
+  # --- 阶段二：二进制规则精细管控 (Rule-Providers) ---
+  # 1. 强效拦截流氓广告
+  - RULE-SET,ads,REJECT
+  # 2. 局域网流量直连
+  - RULE-SET,private,DIRECT
+  - RULE-SET,private_ip,DIRECT,no-resolve
+  # 3. 苹果服务直连 (App Store等)
+  - RULE-SET,apple,DIRECT
+
+  # --- 阶段四：知名外网全家桶强制代理 (走主代理组) ---
+  - RULE-SET,youtube,PROXY
+  - RULE-SET,google,PROXY
+  - RULE-SET,telegram,PROXY
+  - RULE-SET,twitter,PROXY
+  - RULE-SET,netflix,PROXY
+
+  # --- 阶段五：宏观接管与防泄漏兜底 ---
+  # 1. 国内网站极速直连
+  - RULE-SET,cn_domain,DIRECT
+  # 2. 非国内域名强制代理兜底
+  - RULE-SET,geolocation-!cn,PROXY
+  # 3. 国内 IP 兜底 (必须带 no-resolve 防止 DNS 污染)
+  - RULE-SET,cn_ip,DIRECT,no-resolve
+  
+  # --- 阶段六：终极网兜 ---
+  # 不在以上任何规则内的未知冷门流量，统统扔给代理处理
+  - MATCH,PROXY
