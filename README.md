@@ -1,1 +1,1 @@
-# Mihomo-Rules
+# mihomo-rules
