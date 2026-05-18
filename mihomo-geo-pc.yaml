@@ -1,0 +1,299 @@
+# ====================================================
+# Clash Verge Rev (Mihomo) 黄金混合版覆写模板
+# 核心理念：保留 Loyalsoldier 的去广告与进程管控，其余交由 GeoData 极速分流
+# ====================================================
+
+# ----------------------------------------------------
+# 1. 基础运行模式与网络设定
+# ----------------------------------------------------
+mode: rule                  
+mixed-port: 7897            
+allow-lan: false            
+log-level: warning          
+ipv6: true                  
+unified-delay: true         
+bind-address: '*'           
+tcp-concurrent: true        
+keep-alive-interval: 15     
+
+# ----------------------------------------------------
+# 2. 控制台通信与跨域白名单 (Yacd 等 Web 面板通行证)
+# ----------------------------------------------------
+external-controller: 127.0.0.1:9097               
+external-controller-pipe: \\.\pipe\verge-mihomo   
+external-controller-cors:                         
+  allow-private-network: true                     
+  allow-origins:                                  
+    - tauri://localhost
+    - http://tauri.localhost
+    - https://yacd.metacubex.one
+    - http://yacd.metacubex.one
+    - https://metacubex.github.io
+    - http://metacubex.github.io
+
+# ----------------------------------------------------
+# 3. GeoData 数据库设置 (极速分类引擎)
+# ----------------------------------------------------
+geodata-mode: true          
+geo-auto-update: true       
+geo-update-interval: 24     
+geox-url:                   
+  geoip: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
+
+# ----------------------------------------------------
+# 4. TUN 虚拟网卡模式 (底层流量全面接管)
+# ----------------------------------------------------
+tun:
+  enable: true                 
+  auto-detect-interface: true  
+  auto-route: true             
+  device: Mihomo               
+  dns-hijack:                  
+    - any:53
+  mtu: 1400                    
+  route-exclude-address: []    
+  stack: mixed                 
+  strict-route: true
+  endpoint-independent-nat: true
+# ----------------------------------------------------
+# X. 流量嗅探 (破解 APP 直连 IP 导致的分流失效)
+# ----------------------------------------------------
+sniffer:
+  enable: true
+  parse-pure-ip: true             # 核心：尝试反向解析纯 IP 连接
+  override-destination: true      # 核心：用嗅探到的真实域名替换掉原来的 IP
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    QUIC:
+      ports: [443]
+  force-domain:
+    - "+.netflix.com"
+    - "+.nflxvideo.net"
+    - "+.amazonaws.com"
+    - "+.media.dssott.com"
+    - "+.tiktok.com"
+  skip-domain:
+    - Mijia Cloud
+    - dlg.io.mi.com
+    - "+.oray.com"
+    - "+.sunlogin.net"
+    - "+.push.apple.com"
+# ----------------------------------------------------
+# 5. DNS 防泄漏与 Fake-IP 解析核心
+# ----------------------------------------------------
+dns:
+  enable: true
+  ipv6: true
+  enhanced-mode: fake-ip       
+  listen: 0.0.0.0:53                  
+  default-nameserver:          
+    - system
+    - 223.6.6.6
+    - 114.114.114.114
+    - 2400:3200::1
+    - 2001:4860:4860::8888
+  nameserver:                  
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  proxy-server-nameserver:     
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+    - tls://223.5.5.5
+  direct-nameserver: []
+  direct-nameserver-follow-policy: false
+  fake-ip-range: 198.18.0.1/16 
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:              
+    - '*.lan'
+    - '*.local'
+    - '*.arpa'
+    - time.*.com
+    - ntp.*.com
+    - +.market.xiaomi.com
+    - localhost.ptlogin2.qq.com
+    - '*.msftncsi.com'
+    - www.msftconnecttest.com
+  fallback: []                 
+  fallback-filter:             
+    geoip: true
+    geoip-code: CN
+    domain:
+      - +.google.com
+      - +.facebook.com
+      - +.youtube.com
+    ipcidr:
+      - 240.0.0.0/4
+      - 0.0.0.0/32
+  prefer-h3: false             
+  respect-rules: false
+  use-hosts: false
+  use-system-hosts: false
+
+# ----------------------------------------------------
+# 6. UI 行为与持久化缓存
+# ----------------------------------------------------
+profile:
+  store-selected: true         
+  store-fake-ip: true          
+
+# ----------------------------------------------------
+# 7. 代理组 (极简嵌套架构 - The Masterpiece)
+# ----------------------------------------------------
+proxy-groups:
+  # === 1. 顶层面板 (只留三个，极度清爽) ===
+  - name: PROXY
+    type: select
+    proxies:
+      - 🛡️ 稳定首选
+      - 🚀 手动切换
+      - 🤖 AI 专区
+      - 🎯 全局直连
+
+  # === 2. AI 专属 (保持不变) ===
+  - name: 🤖 AI 专区
+    type: select
+    proxies:
+      - 🇺🇸 美国专区
+      - 🇯🇵 日本专区
+      - 🇸🇬 新加坡专区
+      - 🇹🇼 台湾专区
+
+  # === 3. 终极主路由：区域故障转移 ===
+  - name: 🛡️ 稳定首选
+    type: fallback
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - 🇭🇰 香港专区      
+      - 🇯🇵 日本专区      
+      - 🇸🇬 新加坡专区    
+      - 🇹🇼 台湾专区
+      - 🇺🇸 美国专区
+
+  # === 4. 手动面板 ===
+  - name: 🚀 手动切换
+    type: select
+    proxies:
+      - 🇭🇰 香港专区
+      - 🇹🇼 台湾专区
+      - 🇯🇵 日本专区
+      - 🇸🇬 新加坡专区
+      - 🇺🇸 美国专区
+      - 🌍 其他地区
+
+  # === 5. 地区自动测速===
+  - name: 🇭🇰 香港专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)🇭🇰|HK|香港|HongKong"
+
+  - name: 🇹🇼 台湾专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)🇹🇼|TW|台湾|Taiwan"
+
+  - name: 🇯🇵 日本专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)🇯🇵|JP|日本|Japan"
+
+  - name: 🇸🇬 新加坡专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)🇸🇬|SG|新加坡|Singapore"
+
+  - name: 🇺🇸 美国专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)🇺🇸|US|美国|America"
+
+  - name: 🌍 其他地区
+    type: select
+    include-all: true
+    exclude-filter: "(?i)🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|HK|TW|SG|JP|US|香港|台湾|新加坡|日本|美国|到期|通知|官网|剩余|流量|QQ群|TG群|更新|重置"
+
+  - name: 🎯 全局直连
+    type: select
+    proxies:
+      - DIRECT
+
+# ----------------------------------------------------
+# 8. 外部规则集 (仅保留最精华的两把“外科手术刀”)
+# ----------------------------------------------------
+rule-providers:
+  # 第一把刀：防 P2P 泄露与高并发软件管控 (迅雷、BT、微信等)
+  applications:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
+    path: ./ruleset/applications.yaml
+    interval: 86400
+  
+  # 第二把刀：懂国情的去广告库 (比 GeoData 的内置去广告更懂国内流氓软件)
+  reject:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt"
+    path: ./ruleset/reject.yaml
+    interval: 86400
+
+# ====================================================
+# 9. 黄金混合路由分流规则 (优先级自上而下严格匹配)
+# ====================================================
+rules:
+  # --- AI 专属定点分流 (直接调用 GeoData 数据库) ---
+  - GEOSITE,openai,🤖 AI 专区
+  - GEOSITE,anthropic,🤖 AI 专区
+  - GEOSITE,google-gemini,🤖 AI 专区
+  # --- 阶段一：网页控制面板绝对直连 ---
+  - DOMAIN,clash.razord.top,DIRECT
+  - DOMAIN,yacd.haishan.me,DIRECT
+  
+  # --- 阶段二：文本规则精细管控 (Rule-Providers) ---
+  # 1. 高并发软件绿色通道，直连放行，极大减轻内核 CPU 压力
+  - RULE-SET,applications,DIRECT
+  # 2. 强效拦截国内外追踪器与流氓广告
+  - RULE-SET,reject,REJECT
+  
+  # --- 阶段三：GeoData 极速宏观接管 (GEOSITE) ---
+  # 1. 局域网流量直连
+  - GEOSITE,private,DIRECT
+  # 2. 苹果服务直连 (App Store 等)
+  - GEOSITE,apple,DIRECT
+  # 3. 知名外网全家桶强制代理
+  - GEOSITE,google,PROXY
+  - GEOSITE,telegram,PROXY
+  # 4. 国内网站极速直连 (涵盖数十万个中国域名)
+  - GEOSITE,cn,DIRECT
+  # 5. 非国内域名强制代理兜底 (Geolocation 完美排除法)
+  - GEOSITE,geolocation-!cn,PROXY
+  
+  # --- 阶段四：IP 规则防泄漏与兜底 (GEOIP) ---
+  # 必须带 no-resolve，防止在这最后一步触发本地 DNS 真实解析导致运营商污染
+  - GEOIP,LAN,DIRECT,no-resolve
+  - GEOIP,CN,DIRECT,no-resolve
+  
+  # --- 阶段五：终极网兜 ---
+  # 不在以上任何规则内的未知冷门流量，为了安全起见，统统扔给代理处理
+  - MATCH,PROXY
