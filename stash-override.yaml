@@ -1,0 +1,286 @@
+# ====================================================
+# Stash 极简黄金混合版 (基于 Mihomo 配置深度优化)
+# 融合 WhiteList-Min-AntiAD 与全覆盖分流优势
+# ====================================================
+
+rule-anchor:
+  # Stash 不支持 mrs 二进制，因此转化为 Stash 完美支持的 classical yaml 格式
+  classical: &classical {type: http, interval: 86400, behavior: classical, format: yaml}
+
+# ----------------------------------------------------
+# 1. 基础运行模式与网络设定
+# ----------------------------------------------------
+mode: rule
+mixed-port: 7890
+allow-lan: false
+log-level: warning
+ipv6: true
+unified-delay: true
+bind-address: '*'
+tcp-concurrent: true
+
+# [Stash 专属增强] - 提取自通用模板
+keep-alive-interval: 60
+find-process-mode: strict
+
+# ----------------------------------------------------
+# 2. TUN 虚拟网卡模式 (iOS/Mac 原生接管)
+# ----------------------------------------------------
+tun:
+  enable: true
+  auto-detect-interface: true  
+  auto-route: true 
+  # Stash 会自动选择最优底层接口，无需指定 gVisor 或设备名，以防兼容性报错
+  dns-hijack:
+    - 198.18.0.2:53
+    - 'any:53'
+  mtu: 9000
+  route-exclude-address: []
+
+# ----------------------------------------------------
+# 3. DNS 防泄漏与 Fake-IP 解析核心
+# ----------------------------------------------------
+dns:
+  enable: true
+  ipv6: true
+  enhanced-mode: fake-ip
+  listen: 0.0.0.0:1053
+  default-nameserver:
+    - system
+    - 223.5.5.5
+    - 114.114.114.114
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  proxy-server-nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  direct-nameserver: []
+  direct-nameserver-follow-policy: false
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - '*.arpa'
+    - time.*.com
+    - ntp.*.com
+    - +.market.xiaomi.com
+    - localhost.ptlogin2.qq.com
+    - '*.msftncsi.com'
+    - www.msftconnecttest.com
+  fallback: []
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    domain:
+      - +.google.com
+      - +.facebook.com
+      - +.youtube.com
+    ipcidr:
+      - 240.0.0.0/4
+      - 0.0.0.0/32
+
+# ----------------------------------------------------
+# 4. 嗅探功能 (精准识别流媒体与硬编码 IP)
+# ----------------------------------------------------
+sniffer:
+  enable: true
+  sniff:
+    HTTP: { ports: [ 80, 8080-8880 ], override-destination: true }
+    TLS: { ports: [ 443, 8443 ] }
+    QUIC: { ports: [ 443, 8443 ] }
+  force-domain:
+    - "+.netflix.com"
+    - "+.nflxvideo.net"
+    - "+.amazonaws.com"
+    - "+.media.dssott.com"
+    - "+.tiktok.com"
+  skip-domain:
+    - 'Mijia Cloud' 
+    - 'dlg.io.mi.com'  
+    - '+.apple.com'  
+    - '+.icloud.com'  
+    - '+.wechat.com'  
+    - '+.qpic.cn'  
+    - '+.qq.com'  
+    - '+.wechatapp.com'  
+    - '+.vivox.com'  
+    - '+.oray.com'  
+    - '+.sunlogin.net' 
+
+# ----------------------------------------------------
+# 5. UI 行为与持久化缓存
+# ----------------------------------------------------
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+# ----------------------------------------------------
+# 6. 代理组
+# ----------------------------------------------------
+proxy-groups:
+  - name: PROXY
+    type: select
+    proxies:
+      - 🛡️ 稳定首选
+      - 🚀 手动切换
+      - 🤖 AI 专区
+      - 🎯 全局直连
+
+  - name: 🤖 AI 专区
+    type: select
+    proxies:
+      - 🇯🇵 日本专区
+      - 🇸🇬 新加坡专区
+      - 🇺🇸 美国专区
+      - 🇹🇼 台湾专区
+
+  - name: 🛡️ 稳定首选
+    type: fallback
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    proxies:
+      - 🇭🇰 香港专区      
+      - 🇯🇵 日本专区      
+      - 🇸🇬 新加坡专区    
+      - 🇹🇼 台湾专区
+      - 🇺🇸 美国专区
+
+  - name: 🚀 手动切换
+    type: select
+    proxies:
+      - 🇭🇰 香港专区
+      - 🇯🇵 日本专区
+      - 🇸🇬 新加坡专区
+      - 🇹🇼 台湾专区
+      - 🇺🇸 美国专区
+      - 🌍 其他地区
+
+  - name: 🇭🇰 香港专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)🇭🇰|HK|香港|HongKong"
+
+  - name: 🇹🇼 台湾专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)🇹🇼|TW|台湾|Taiwan"
+
+  - name: 🇯🇵 日本专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)🇯🇵|JP|日本|Japan"
+
+  - name: 🇸🇬 新加坡专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)🇸🇬|SG|新加坡|Singapore"
+
+  - name: 🇺🇸 美国专区
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)🇺🇸|US|美国|America"
+
+  - name: 🌍 其他地区
+    type: select
+    include-all: true
+    exclude-filter: "(?i)🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|HK|TW|SG|JP|US|香港|台湾|新加坡|日本|美国|到期|通知|官网|剩余|流量|QQ群|TG群|更新|重置"
+
+  - name: 🎯 全局直连
+    type: select
+    proxies:
+      - DIRECT
+
+# ----------------------------------------------------
+# 7. 外部规则库
+# ----------------------------------------------------
+rule-providers:
+  # 广告拦截
+  ads: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Advertising/Advertising.yaml" }
+  
+  # AI 专区
+  openai: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/OpenAI/OpenAI.yaml" }
+  anthropic: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Claude/Claude.yaml" }
+  gemini: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Gemini/Gemini.yaml" }
+  
+  # 核心开发与游戏服务 (防遗漏补充)
+  github: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.yaml" }
+
+  # 国际社交与流媒体
+  youtube: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml" }
+  google: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Google/Google.yaml" }
+  telegram: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.yaml" }
+  twitter: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.yaml" }
+  netflix: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.yaml" }
+  
+  # 国内直连与防漏网兜底
+  apple: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple.yaml" }
+  private: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Lan/Lan.yaml" }
+  cn_domain: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaMax/ChinaMax.yaml" }
+  # 代理规则池扩展，包含常见被墙域名，弥补纯 GeoIP 的判定盲区
+  proxy_domain: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Proxy/Proxy.yaml" }
+  geolocation-!cn: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Global/Global.yaml" }
+  # 已修复正确的纯 IP 规则路径
+  cn_ip: { <<: *classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaIPs/ChinaIPs_IP.yaml" }
+
+# ====================================================
+# 8. 黄金混合路由分流规则 (优先级自上而下严格匹配)
+# ====================================================
+rules:
+  # --- 阶段一：AI 专属定点分流 ---
+  - RULE-SET,openai,🤖 AI 专区
+  - RULE-SET,anthropic,🤖 AI 专区
+  - RULE-SET,gemini,🤖 AI 专区  
+  
+  # --- 阶段二：广告与隐私保护 ---
+  - RULE-SET,ads,REJECT
+  - RULE-SET,private,DIRECT
+  
+  # --- 阶段三：苹果服务直连 ---
+  - RULE-SET,apple,DIRECT
+
+  # --- 阶段四：开发代码库 ---
+  - RULE-SET,github,PROXY
+
+  # --- 阶段五：知名外网全家桶强制代理 ---
+  - RULE-SET,youtube,PROXY
+  - RULE-SET,google,PROXY
+  - RULE-SET,telegram,PROXY
+  - RULE-SET,twitter,PROXY
+  - RULE-SET,netflix,PROXY
+
+  # --- 阶段六：宏观接管与防泄漏兜底 (强化版) ---
+  # 1. 国内网站极速直连
+  - RULE-SET,cn_domain,DIRECT
+  # 2. 已知墙外域名规则池强制代理 (比 Global 更精确的防遗漏网兜)
+  - RULE-SET,proxy_domain,PROXY
+  # 3. 非国内域名强制代理兜底 (类似 Loyalsoldier 的 proxy 兜底)
+  - RULE-SET,geolocation-!cn,PROXY
+  # 4. 国内 IP 兜底 (修复后的纯 IP 规则，no-resolve 防止 DNS 泄露等待)
+  - RULE-SET,cn_ip,DIRECT,no-resolve
+  
+  # 5. GEOIP 兜底 (终极双重保险)
+  - GEOIP,CN,DIRECT,no-resolve
+  
+  # --- 阶段七：终极网兜 ---
+  - MATCH,PROXY
