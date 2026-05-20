@@ -228,20 +228,30 @@ sniffer:
 # 8. 外部二进制规则库 (调用顶部的锚点)
 # ----------------------------------------------------
 rule-providers:
-  # 广告拦截
+  # 广告与测速拦截
   ads: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.mrs" }
-  # 防耗流专区 (测速工具)
   speedtest: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-speedtest.mrs" }
-  # AI 专区 (已严格核实验证存在的官方库)
+  
+  # AI 专区 (核实验证存在的官方独立库)
   openai: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/openai.mrs" }
   anthropic: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/anthropic.mrs" }
   gemini: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google-gemini.mrs" }
   xai: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/xai.mrs" }
-  # 国内直连与防漏网兜底
+  
+  # 国际知名大厂与流媒体 (从 Stash 迁移并核实存在)
+  github: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs" }
+  youtube: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs" }
+  google: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs" }
+  telegram: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs" }
+  twitter: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs" }
+  netflix: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs" }
+
+  # 局域网、国内直连与防漏网兜底
   apple: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs" }
   private: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" }
   cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs" }
   geolocation-!cn: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs" }
+  
   # IP 数据
   cn_ip: { <<: *ipcidr, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs" }
   private_ip: { <<: *ipcidr, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs" }
@@ -250,9 +260,9 @@ rule-providers:
 # 9. 黄金混合路由分流规则 (优先级自上而下严格匹配)
 # ====================================================
 rules:
-  # --- 阶段一：强制硬编码层 (仅保留无二进制库 或 必须越权覆盖的例外) ---
+  # --- 阶段一：强制硬编码层 (仅保留无外部库 或 必须越权覆盖的例外) ---
   
-  # 1. 越权覆盖层：官方 apple.mrs 默认走直连。为防推送漏接与 Apple AI 宕机，在此硬编码截胡！
+  # 1. 越权覆盖层：官方 apple 默认走直连。为防推送漏接与 Apple AI 宕机，在此硬编码截胡
   - DOMAIN-SUFFIX,push.apple.com,🌐 网络出口
   - DOMAIN-SUFFIX,apple-relay.apple.com,🤖 AI 专区
   - DOMAIN-SUFFIX,cdn-smoot.apple.com,🤖 AI 专区
@@ -261,30 +271,49 @@ rules:
   - DOMAIN-KEYWORD,apple-relay,🤖 AI 专区
   - DOMAIN,guzzoni.apple.com,🤖 AI 专区
   
-  # 2. 缺失二进制库的 AI：Copilot 官方未独立建库，Robinfrontend (Grok 关联节点) 较冷门，保留硬编码以防漏网
+  # 2. 缺失独立二进制库的硬编码补充
+  # Copilot：官方无独立库，混在 microsoft 内，必须硬编码精准提取
   - DOMAIN-KEYWORD,copilot,🤖 AI 专区
-  - DOMAIN-KEYWORD,robinfrontend,🤖 AI 专区
+  # (注意：xAI 官方已有 xai.mrs，已转入阶段二接管，不再硬编码)
 
   # --- 阶段二：二进制规则管控 (核心 AI 与防耗流) ---
-  # 1. 有独立规则库的 AI 工具大颗粒度兜底
+  
+  # 1. 有独立规则库的 AI 工具精准分流
   - RULE-SET,openai,🤖 AI 专区
   - RULE-SET,anthropic,🤖 AI 专区
   - RULE-SET,gemini,🤖 AI 专区  
   - RULE-SET,xai,🤖 AI 专区
+  
   # 2. 测速软件强制直连 (保护机场节点流量)
   - RULE-SET,speedtest,DIRECT
+  
   # 3. 强效拦截国内外流氓广告
   - RULE-SET,ads,REJECT
 
   # --- 阶段三：局域网与基础大厂直连 ---
+  
+  # 恢复 private_ip：因 Mihomo 内核 geosite:private 只含域名，不含 IP
   - RULE-SET,private,DIRECT
   - RULE-SET,private_ip,DIRECT,no-resolve
   - RULE-SET,apple,DIRECT
 
-  # --- 阶段四：宏观接管与精简兜底 ---
+  # --- 阶段四：国际社交、流媒体与核心开发 (从 Stash 迁移并使用二进制) ---
+  
+  - RULE-SET,github,🌐 网络出口
+  - RULE-SET,youtube,🌐 网络出口
+  - RULE-SET,google,🌐 网络出口
+  - RULE-SET,telegram,🌐 网络出口
+  - RULE-SET,twitter,🌐 网络出口
+  - RULE-SET,netflix,🌐 网络出口
+
+  # --- 阶段五：宏观接管与精简兜底 ---
+  
+  # 1. 国内网站极速直连
   - RULE-SET,cn_domain,DIRECT
+  # 2. 全球非中国域名宽泛兜底 (完美替代且覆盖 proxy_domain)
   - RULE-SET,geolocation-!cn,🌐 网络出口
+  # 3. 国内 IP 兜底 (带 no-resolve 防 DNS 污染)
   - RULE-SET,cn_ip,DIRECT,no-resolve
   
-  # --- 阶段五：终极网兜 ---
+  # --- 阶段六：终极网兜 ---
   - MATCH,🌐 网络出口
