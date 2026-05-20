@@ -229,7 +229,17 @@ sniffer:
 # ----------------------------------------------------
 rule-providers:
   # 广告与测速拦截
-  ads: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.mrs" }
+  # ads: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.mrs" }
+  
+  # 替换掉原来的 MetaCubeX ads
+  # 引入 Blackmatrix7 海量去广告规则 (纯文本 YAML 格式，高内存占用预警！)
+  ads_bm7:
+    type: http
+    behavior: classical  # Blackmatrix7 的 Clash 规则格式通常为 classical
+    format: yaml         # 格式必须声明为 yaml，不能用 mrs
+    interval: 86400
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Advertising/Advertising.yaml"
+  # speedtest 专区 
   speedtest: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-speedtest.mrs" }
   
   # AI 专区 (核实验证存在的官方独立库)
@@ -288,8 +298,9 @@ rules:
   - RULE-SET,speedtest,DIRECT
   
   # 3. 强效拦截国内外流氓广告
-  - RULE-SET,ads,REJECT
-
+  # - RULE-SET,ads,REJECT
+  # 3. 强效拦截国内外流氓广告 (使用 Blackmatrix7)
+  - RULE-SET,ads_bm7,REJECT
   # --- 阶段三：局域网与基础大厂直连 ---
   
   # 恢复 private_ip：因 Mihomo 内核 geosite:private 只含域名，不含 IP
