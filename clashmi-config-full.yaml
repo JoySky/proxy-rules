@@ -99,7 +99,7 @@ profile:
 # ----------------------------------------------------
 proxy-groups:
   # === 1. 顶层面板 (只留三个，极度清爽) ===
-  - name: PROXY
+  - name: 🌐 网络出口
     type: select
     proxies:
       - 🛡️ 稳定首选
@@ -253,7 +253,7 @@ rule-providers:
 rules:
   # --- 阶段一：强制硬编码层 (仅保留二进制库无法拆分的“例外”) ---
   # 官方 apple.mrs 默认全走直连。为了把推送和 Apple AI 单独拎出来走代理，必须在这里硬编码截胡！
-  - DOMAIN-SUFFIX,push.apple.com,PROXY
+  - DOMAIN-SUFFIX,push.apple.com,🌐 网络出口
   - DOMAIN-SUFFIX,apple-relay.apple.com,🤖 AI 专区
   - DOMAIN-SUFFIX,cdn-smoot.apple.com,🤖 AI 专区
   - DOMAIN-SUFFIX,smoot.apple.com,🤖 AI 专区
@@ -280,8 +280,8 @@ rules:
 
   # --- 阶段四：宏观接管与精简兜底 ---
   - RULE-SET,cn_domain,DIRECT
-  - RULE-SET,geolocation-!cn,PROXY
+  - RULE-SET,geolocation-!cn,🌐 网络出口
   - RULE-SET,cn_ip,DIRECT,no-resolve
   
   # --- 阶段五：终极网兜 ---
-  - MATCH,PROXY
+  - MATCH,🌐 网络出口
