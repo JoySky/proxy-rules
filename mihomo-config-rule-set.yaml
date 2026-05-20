@@ -323,31 +323,50 @@ rule-providers:
     interval: 86400
 
 # ----------------------------------------------------
-# 9. 终极路由分流规则 (优先级从上到下)
+# 9. 终极路由分流规则 (优先级自上而下严格匹配)
 # ----------------------------------------------------
 rules:
+  # --- 阶段零：AI 特权直达通道 (最高优先级，防风控) ---
   - GEOSITE,openai,🤖 AI 专区
   - GEOSITE,anthropic,🤖 AI 专区
   - GEOSITE,google-gemini,🤖 AI 专区
-  # 应用与面板直连
-  - RULE-SET,applications,DIRECT
-  - DOMAIN,clash.razord.top,DIRECT
-  - DOMAIN,yacd.haishan.me,DIRECT
-  # 局域网直连与广告拦截
-  - RULE-SET,private,DIRECT
-  - RULE-SET,reject,REJECT
-  # 苹果与谷歌分流
+  - DOMAIN-SUFFIX,grok.com,🤖 AI 专区          # Grok 官网
+  - DOMAIN-SUFFIX,x.ai,🤖 AI 专区              # Grok 接口
+  
+  # --- 阶段一：应用、面板与测速直连 (防跑流量首选) ---
+  - RULE-SET,applications,DIRECT               # 高并发应用直连 (如迅雷、BT)
+  - DOMAIN,clash.razord.top,DIRECT             # 外部控制面板
+  - DOMAIN,yacd.haishan.me,DIRECT              # 外部控制面板
+  - GEOSITE,category-speedtest,DIRECT          # 拦截各类测速软件/网站，走本地物理宽带
+  
+  # --- 阶段二：局域网直连与广告拦截 ---
+  - RULE-SET,private,DIRECT                    # 局域网地址放行
+  - RULE-SET,reject,REJECT                     # Loyalsoldier 广告与追踪器拦截
+  
+  # --- 阶段三：特定外企服务直连 (微软与苹果，极度省流量) ---
   - RULE-SET,icloud,DIRECT
   - RULE-SET,apple,DIRECT
-  - RULE-SET,google,🌐网络出口
-  # 代理与直连名单分流
-  - RULE-SET,proxy,🌐网络出口
-  - RULE-SET,direct,DIRECT
-  # IP 段防泄漏处理 
+  - GEOSITE,onedrive,DIRECT                    # OneDrive 同步直连
+  - GEOSITE,microsoft@cn,DIRECT                # 微软中国区服务直连
+  - GEOSITE,microsoft,DIRECT                   # 微软全局直连 (涵盖 Windows 更新、Xbox 下载)
+  
+  # --- 阶段四：特定外网服务硬编码指向 (确保精确入轨) ---
+  - GEOSITE,github,🌐网络出口
+  - GEOSITE,netflix,🌐网络出口
+  - GEOSITE,reddit,🌐网络出口
+  - GEOSITE,twitch,🌐网络出口
+  - RULE-SET,google,🌐网络出口                 # Google 全家桶
+  
+  # --- 阶段五：代理与直连名单分流 (Loyalsoldier 文本库兜底) ---
+  - RULE-SET,proxy,🌐网络出口                  # 知名外网域名库
+  - RULE-SET,direct,DIRECT                     # 知名国内域名库
+  
+  # --- 阶段六：底层 IP 防泄漏处理 (必须带 no-resolve) ---
   - RULE-SET,lancidr,DIRECT,no-resolve
   - RULE-SET,cncidr,DIRECT,no-resolve
   - RULE-SET,telegramcidr,🌐网络出口,no-resolve  
   - GEOIP,LAN,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
-  # 漏网之鱼：不在以上所有规则内的流量，默认走代理
-  - MATCH,🌐网络出口
+  
+  # --- 阶段七：终极漏网之鱼兜底 ---
+  - MATCH,🌐网络出口                           # 不在以上所有规则内的流量，默认走代理
