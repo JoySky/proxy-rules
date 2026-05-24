@@ -119,16 +119,16 @@ profile:
 # 6. 代理组
 # ----------------------------------------------------
 proxy-groups:
-  - name: 🌐 网络出口
+  - name: 🌐 全局策略
     type: select
     proxies:
-      - 🛡️ 稳定首选
-      - 🚀 自动切换
-      - 🕹️ 手动切换
-      - 🤖 AI 节点
-      - 🎯 全局直连
+      - 🛡️ 稳定策略
+      - 🚀 极速策略
+      - 🕹️ 手动策略
+      - 🤖 AI 策略
+      - 🎯 直连策略
 
-  - name: 🤖 AI 节点
+  - name: 🤖 AI 策略
     type: select
     proxies:
       - 🇯🇵 日本节点
@@ -136,7 +136,7 @@ proxy-groups:
       - 🇺🇸 美国节点
       - 🇹🇼 台湾节点
 
-  - name: 🛡️ 稳定首选
+  - name: 🛡️ 稳定策略
     type: fallback
     url: http://www.gstatic.com/generate_204
     interval: 600
@@ -147,7 +147,7 @@ proxy-groups:
       - 🇹🇼 台湾节点
       - 🇺🇸 美国节点
 
-  - name: 🕹️ 手动切换
+  - name: 🕹️ 手动策略
     type: select
     proxies:
       - 🇭🇰 香港节点
@@ -157,7 +157,7 @@ proxy-groups:
       - 🇺🇸 美国节点
       - 🌍 其他节点
       
-  - name: 🚀 自动切换
+  - name: 🚀 极速策略
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 600
@@ -215,12 +215,12 @@ proxy-groups:
     include-all: true
     filter: "(?i)🇺🇸|US|美国|America"
 
-  - name: 🌍 其他地区
+  - name: 🌍 其他节点
     type: select
     include-all: true
     exclude-filter: "(?i)🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|HK|TW|SG|JP|US|香港|台湾|新加坡|日本|美国|到期|通知|官网|剩余|流量|QQ群|TG群|更新|重置"
 
-  - name: 🎯 全局直连
+  - name: 🎯 直连策略
     type: select
     proxies:
       - DIRECT
@@ -271,26 +271,26 @@ rules:
   # --- 阶段一：强制硬编码层 (仅保留无外部库 或 必须越权覆盖的例外) ---
   
   # 1. 越权覆盖层：官方 apple 默认走直连。为防推送漏接与 Apple AI 宕机，在此硬编码截胡！
-  - DOMAIN-SUFFIX,push.apple.com,🌐 网络出口
-  - DOMAIN-SUFFIX,apple-relay.apple.com,🤖 AI 节点
-  - DOMAIN-SUFFIX,cdn-smoot.apple.com,🤖 AI 节点
-  - DOMAIN-SUFFIX,smoot.apple.com,🤖 AI 节点
-  - DOMAIN,gspe1-ssl.ls.apple.com,🤖 AI 节点
-  - DOMAIN-KEYWORD,apple-relay,🤖 AI 节点
-  - DOMAIN,guzzoni.apple.com,🤖 AI 节点
+  - DOMAIN-SUFFIX,push.apple.com,🌐 全局策略
+  - DOMAIN-SUFFIX,apple-relay.apple.com,🤖 AI 策略
+  - DOMAIN-SUFFIX,cdn-smoot.apple.com,🤖 AI 策略
+  - DOMAIN-SUFFIX,smoot.apple.com,🤖 AI 策略
+  - DOMAIN,gspe1-ssl.ls.apple.com,🤖 AI 策略
+  - DOMAIN-KEYWORD,apple-relay,🤖 AI 策略
+  - DOMAIN,guzzoni.apple.com,🤖 AI 策略
   
   # 2. xAI (Grok) 硬编码：Blackmatrix7 暂未收录独立 xAI 库，在此添加核心域名以防漏网
-  - DOMAIN-SUFFIX,x.ai,🤖 AI 节点
-  - DOMAIN-SUFFIX,grok.com,🤖 AI 节点
-  - DOMAIN-KEYWORD,robinfrontend,🤖 AI 节点
+  - DOMAIN-SUFFIX,x.ai,🤖 AI 策略
+  - DOMAIN-SUFFIX,grok.com,🤖 AI 策略
+  - DOMAIN-KEYWORD,robinfrontend,🤖 AI 策略
 
   # --- 阶段二：文本规则管控 (核心 AI 与防耗流) ---
 
   # 1. 有独立规则库的 AI 工具精准分流
-  - RULE-SET,openai,🤖 AI 节点
-  - RULE-SET,anthropic,🤖 AI 节点
-  - RULE-SET,gemini,🤖 AI 节点  
-  - RULE-SET,copilot,🤖 AI 节点
+  - RULE-SET,openai,🤖 AI 策略
+  - RULE-SET,anthropic,🤖 AI 策略
+  - RULE-SET,gemini,🤖 AI 策略  
+  - RULE-SET,copilot,🤖 AI 策略
   
   # 2. 测速软件强制直连 (保护机场节点流量)
   - RULE-SET,speedtest,DIRECT
@@ -304,20 +304,20 @@ rules:
   - RULE-SET,apple,DIRECT
 
   # --- 阶段四：国际社交、流媒体与核心开发 (填补缺失的调用) ---
-  - RULE-SET,github,🌐 网络出口
-  - RULE-SET,youtube,🌐 网络出口
-  - RULE-SET,google,🌐 网络出口
-  - RULE-SET,telegram,🌐 网络出口
-  - RULE-SET,twitter,🌐 网络出口
-  - RULE-SET,netflix,🌐 网络出口
+  - RULE-SET,github,🌐 全局策略
+  - RULE-SET,youtube,🌐 全局策略
+  - RULE-SET,google,🌐 全局策略
+  - RULE-SET,telegram,🌐 全局策略
+  - RULE-SET,twitter,🌐 全局策略
+  - RULE-SET,netflix,🌐 全局策略
 
   # --- 阶段五：宏观接管与精简兜底 ---
   # 1. 国内网站极速直连
   - RULE-SET,cn_domain,DIRECT
   # 2. 常见被墙域名精确代理 (填补缺失的调用)
-  - RULE-SET,proxy_domain,🌐 网络出口
+  - RULE-SET,proxy_domain,🌐 全局策略
   # 3. 全球非中国域名宽泛兜底
-  - RULE-SET,geolocation-!cn,🌐 网络出口
+  - RULE-SET,geolocation-!cn,🌐 全局策略
   # 4. 国内 IP 兜底
   - RULE-SET,cn_ip,DIRECT,no-resolve
   
@@ -325,4 +325,4 @@ rules:
   - GEOIP,CN,DIRECT,no-resolve
   
   # --- 阶段六：终极网兜 ---
-  - MATCH,🌐 网络出口
+  - MATCH,🌐 全局策略
