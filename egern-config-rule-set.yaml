@@ -42,80 +42,107 @@ hijack_dns:
 # 2. DNS 路由引擎 (原生分流解析)
 # ----------------------------------------------------
 dns:
-  public_ip_lookup_url: https://ifconfig.me/ip
+  public_ip_lookup_url: "https://ifconfig.me/ip"
   bootstrap:
     - system
     - 223.5.5.5
     - 119.29.29.29
   upstreams:
     AliDNS:
-      - https://dns.alidns.com/dns-query
+      - "https://dns.alidns.com/dns-query"
     DNSPod:
-      - https://doh.pub/dns-query
+      - "https://doh.pub/dns-query"
     GlobalDNS:
-      - https://1.1.1.1/dns-query
-      - https://8.8.8.8/dns-query
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
     LocalDNS:
       - system
-  forward:
-    # 1. 局域网优先
-    - domain_suffix:
-        match: local
-        value: LocalDNS
-    - domain_suffix: 
-        match: lan
-        value: LocalDNS
-    - domain_suffix: 
-        match: home.arpa
-        value: LocalDNS
-    
-    # 2. 精准应用投递 (阿里系)
-    - domain_suffix: 
-        match: alibaba.com
-        value: AliDNS
-    - domain_suffix: 
-        match: alipay.com
-        value: AliDNS
-    - domain_suffix:
-        match: alipayobjects.com
-        value: AliDNS
-    - domain_suffix: 
-        match: aliapp.org
-        value: AliDNS
-    - domain_suffix: 
-        match: alicdn.com
-        value: AliDNS
-    - domain_suffix: 
-        match: aliyun.com
-        value: AliDNS
-    - domain_suffix: 
-        match: taobao.com
-        value: AliDNS
-    - domain_suffix: 
-        match: tmall.com
-        value: AliDNS
-    - domain_suffix: 
-        match: amap.com
-        value: AliDNS
-    - domain_suffix: 
-        match: ele.me
-        value: AliDNS
       
-    # 3. 精准应用投递 (腾讯系)
-    - domain_suffix: 
-        match: qq.com
+  forward:
+    # ==========================================
+    # 1. 局域网优先 (防内网断联)
+    # ==========================================
+    - domain_suffix:
+        match: "local"
+        value: LocalDNS
+    - domain_suffix:
+        match: "lan"
+        value: LocalDNS
+    - domain_suffix:
+        match: "home.arpa"
+        value: LocalDNS
+    
+    # ==========================================
+    # 2. 精准应用投递 (国内大厂直通，一字不漏)
+    # ==========================================
+    # --- 阿里系 ---
+    - domain_suffix:
+        match: "alibaba.com"
+        value: AliDNS
+    - domain_suffix:
+        match: "alipay.com"
+        value: AliDNS
+    - domain_suffix:
+        match: "alipayobjects.com"
+        value: AliDNS
+    - domain_suffix:
+        match: "aliapp.org"
+        value: AliDNS
+    - domain_suffix:
+        match: "alicdn.com"
+        value: AliDNS
+    - domain_suffix:
+        match: "aliyun.com"
+        value: AliDNS
+    - domain_suffix:
+        match: "taobao.com"
+        value: AliDNS
+    - domain_suffix:
+        match: "tmall.com"
+        value: AliDNS
+    - domain_suffix:
+        match: "amap.com"
+        value: AliDNS
+    - domain_suffix:
+        match: "ele.me"
+        value: AliDNS
+        
+    # --- 腾讯系 ---
+    - domain_suffix:
+        match: "qq.com"
         value: DNSPod
-    - domain_suffix: 
-        match: wechat.com
+    - domain_suffix:
+        match: "wechat.com"
         value: DNSPod
-    - domain_suffix: 
-        match: weixin.com
+    - domain_suffix:
+        match: "weixin.com"
         value: DNSPod
-    - domain_suffix: 
-        match: tencent.com
+    - domain_suffix:
+        match: "tencent.com"
         value: DNSPod
     
-    # 4. BM7 规则集映射
+    # ==========================================
+    # 3. AI 专属 DNS 解析 (抗污染，降延迟)
+    # ==========================================
+    - proxy_rule_set:
+        match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list"
+        value: GlobalDNS
+    - proxy_rule_set:
+        match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list"
+        value: GlobalDNS
+    - proxy_rule_set:
+        match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list"
+        value: GlobalDNS
+    - domain_keyword:
+        match: "copilot"
+        value: GlobalDNS
+    - domain_suffix:
+        match: "bing.com"
+        value: GlobalDNS
+        
+    # ==========================================
+    # 4. 宏观规则集映射 (完美对齐 rules 分流)
+    # ==========================================
     - proxy_rule_set:
         match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax.list"
         value: AliDNS
@@ -123,10 +150,12 @@ dns:
         match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global.list"
         value: GlobalDNS
         
-    # 5. 兜底 DNS
-    - wildcard: 
-        match: '*'
-        value: AliDNS
+    # ==========================================
+    # 5. 终极兜底 (对齐 rules 的 🌐 全局策略)
+    # ==========================================
+    - wildcard:
+        match: "*"
+        value: GlobalDNS
 # ----------------------------------------------------
 # 3. 策略组架构 (订阅分离，动态正则抓取)
 # ----------------------------------------------------
