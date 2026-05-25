@@ -1,0 +1,262 @@
+# ====================================================
+# Egern 纯血原生版 (GitHub 安全托管 + QUIC 拦截防漏)
+# ====================================================
+
+# ----------------------------------------------------
+# 1. 基础设定
+# ----------------------------------------------------
+# 是否启用 IPv6。默认值是 false
+ipv6: true
+
+# 核心：全局阻断 QUIC(UDP 443)，强迫大厂广告降级为 TCP，从而被规则精准拦截
+block_quic: true 
+# HTTP 代理端口号。默认值是 3080
+http_port: 3080
+
+# SOCKS 代理端口号。默认值是 3090
+socks_port: 3090
+
+# 允许外部连接通过 Wi-Fi 访问设备上的代理。默认值是 false
+allow_external_connections: false
+
+# 仅虚拟网接口模式。默认值是 false
+vif_only: false
+
+# 使用真实 IP 的域名列表（不使用 Fake IP）。默认值是空数组
+real_ip_domains:
+  - "*.lan"
+  - "*.push.apple.com"
+# 隐藏 VPN 图标。默认值是 false
+hide_vpn_icon: false
+
+# 劫持 DNS 的地址列表。默认值是空数组
+hijack_dns:
+  - '*'
+
+# 指定自定义的 GeoIP 数据库 URL。默认值是空
+geoip_db_url: null
+
+# 指定自定义的 ASN 数据库 URL。默认值是空
+asn_db_url: null
+
+# 自定义的代理延迟测试 URL。默认值是空
+proxy_latency_test_url: null
+
+# 自定义的直连延迟测试 URL。默认值是空
+direct_latency_test_url: null
+
+# 兼容路由模式。默认值是 false
+compat_route: false
+
+# 包含所有网络流量。默认值是 false
+include_all_networks: false
+
+# 包含 APNs 流量（需 include_all_networks 启用）。默认值是 false
+include_apns: false
+
+# 包含蜂窝网络服务流量（需 include_all_networks 启用）。默认值是 false
+include_cellular_services: false
+
+# 包含本地网络流量（需 include_all_networks 启用）。默认值是 false
+include_local_networks: false
+
+# 虚拟接口包含的路由。默认值是空数组
+vif_included_routes:
+  - 192.168.0.1/32
+
+# 虚拟接口排除的路由。默认值是空数组
+vif_excluded_routes:
+  - 192.168.0.1/32
+  
+# ----------------------------------------------------
+# 2. DNS 设定
+# ----------------------------------------------------
+dns:
+  bootstrap:
+    - system
+  upstreams:
+    default_doh:
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+  forward:
+    - wildcard:
+        match: '*.cn'
+        value: bootstrap
+
+# ----------------------------------------------------
+# 3. 策略组架构 (订阅分离，动态正则抓取)
+# ----------------------------------------------------
+policy_groups:
+  # === 1. 顶层主面板 ===
+  - select:
+      name: 🌐 全局策略
+      policies:
+        - 🛡️ 稳定策略
+        - 🚀 极速策略
+        - 🕹️ 手动策略
+        - 🤖 AI 策略
+        - 🎯 直连策略
+
+  # === 2. 终极主路由：区域故障转移 ===
+  - fallback:
+      name: 🛡️ 稳定策略
+      policies:
+        - 🇭🇰 香港节点      
+        - 🇯🇵 日本节点      
+        - 🇸🇬 新加坡节点    
+        - 🇹🇼 台湾节点
+        - 🇺🇸 美国节点
+      interval: 600
+
+  # === 3. 自动切换面板 ===
+  - auto_test:
+      name: 🚀 极速策略
+      policies:
+        - 🇭🇰 香港节点
+        - 🇯🇵 日本节点
+        - 🇸🇬 新加坡节点
+        - 🇹🇼 台湾节点
+        - 🇺🇸 美国节点
+      interval: 600
+      tolerance: 100
+
+  # === 4. 手动面板 ===
+  - select:
+      name: 🕹️ 手动策略
+      policies:
+        - 🇭🇰 香港节点
+        - 🇯🇵 日本节点
+        - 🇸🇬 新加坡节点
+        - 🇹🇼 台湾节点
+        - 🇺🇸 美国节点
+  
+  # === 5. AI 专属 ===
+  - select:
+      name: 🤖 AI 策略
+      policies:
+        - 🇯🇵 日本节点
+        - 🇸🇬 新加坡节点
+        - 🇺🇸 美国节点
+        - 🇹🇼 台湾节点
+      
+  # === 6. 直连策略 ===
+  - select:
+      name: 🎯 直连策略
+      policies:
+        - DIRECT
+
+  # === 7. 地区节点动态抓取 (核心：include_all 从本地环境提取节点) ===
+  - auto_test:
+      name: 🇭🇰 香港节点
+      interval: 600
+      tolerance: 100
+      include_all: true
+      filter: '(?i)🇭🇰|HK|香港|HongKong'
+
+  - auto_test:
+      name: 🇯🇵 日本节点
+      interval: 600
+      tolerance: 100
+      include_all: true
+      filter: '(?i)🇯🇵|JP|日本|Japan'
+
+  - auto_test:
+      name: 🇸🇬 新加坡节点
+      interval: 600
+      tolerance: 100
+      include_all: true
+      filter: '(?i)🇸🇬|SG|新加坡|Singapore'
+
+  - auto_test:
+      name: 🇹🇼 台湾节点
+      interval: 600
+      tolerance: 100
+      include_all: true
+      filter: '(?i)🇹🇼|TW|台湾|Taiwan'
+
+  - auto_test:
+      name: 🇺🇸 美国节点
+      interval: 600
+      tolerance: 100
+      include_all: true
+      filter: '(?i)🇺🇸|US|美国|America'
+
+# ----------------------------------------------------
+# 4. 黄金分流规则 (全系 Blackmatrix7 list，最高解析效率)
+# ----------------------------------------------------
+rules:
+  # --- 阶段一：硬编码急救层 ---
+  - domain_suffix:
+      match: push.apple.com
+      policy: 🌐 全局策略
+  - domain_suffix:
+      match: apple-relay.apple.com
+      policy: 🤖 AI 策略
+  - domain:
+      match: gspe1-ssl.ls.apple.com
+      policy: 🤖 AI 策略
+  - domain_keyword:
+      match: apple-relay
+      policy: 🤖 AI 策略
+  - domain_keyword:
+      match: copilot
+      policy: 🤖 AI 策略
+
+  # --- 阶段二：微观应用层 ---
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list"
+      policy: 🤖 AI 策略
+      update_interval: 86400
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Anthropic/Anthropic.list"
+      policy: 🤖 AI 策略
+      update_interval: 86400
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list"
+      policy: 🤖 AI 策略
+      update_interval: 86400
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list"
+      policy: 🌐 全局策略
+      update_interval: 86400
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Netflix/Netflix.list"
+      policy: 🌐 全局策略
+      update_interval: 86400
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Telegram/Telegram.list"
+      policy: 🌐 全局策略
+      update_interval: 86400
+
+  # 注：已遵循你的指示，将去广告 (Reject) 等功能移除，交由 Egern 模块单独配置。
+
+  # --- 阶段三：宏观直连与外网兜底 (纯血 Blackmatrix7) ---
+  # ChinaMax：国内域名极其详尽的直连白名单
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax.list"
+      policy: 🎯 直连策略
+      update_interval: 86400
+  # Global：外网服务与被墙域名的兜底黑名单
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global.list"
+      policy: 🌐 全局策略
+      update_interval: 86400
+
+  # --- 阶段四：底层局域网与 IP 兜底 (零内存开销) ---
+  - ip_cidr:
+      match: 192.168.0.0/16
+      policy: 🎯 直连策略
+  - ip_cidr:
+      match: 10.0.0.0/8
+      policy: 🎯 直连策略
+  - ip_cidr:
+      match: 172.16.0.0/12
+      policy: 🎯 直连策略
+  - geoip:
+      match: CN
+      policy: 🎯 直连策略
+      no_resolve: true
+  
+  # --- 阶段五：终极网兜 ---
+  - default:
+      policy: 🌐 全局策略
