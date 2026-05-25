@@ -5,7 +5,7 @@
 # ----------------------------------------------------
 # 1. 全局基础设定 (针对 iOS 深度优化)
 # ----------------------------------------------------
-ipv6: true
+ipv6: false
 http_port: 3080
 socks_port: 3090
 allow_external_connections: false
@@ -60,7 +60,7 @@ dns:
       
   forward:
     # ==========================================
-    # 1. 局域网优先 (防内网断联)
+    # 第一层：局域网物理直连 (绝对优先，防断网)
     # ==========================================
     - domain_suffix:
         match: "local"
@@ -73,7 +73,7 @@ dns:
         value: LocalDNS
     
     # ==========================================
-    # 2. 精准应用投递 (国内大厂直通，一字不漏)
+    # 第二层：精准厂商投递 (保障核心 App 秒开)
     # ==========================================
     # --- 阿里系 ---
     - domain_suffix:
@@ -121,38 +121,17 @@ dns:
         match: "tencent.com"
         value: DNSPod
     
-    # ==========================================
-    # 3. AI 专属 DNS 解析 (抗污染，降延迟)
-    # ==========================================
-    - proxy_rule_set:
-        match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list"
-        value: GlobalDNS
-    - proxy_rule_set:
-        match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list"
-        value: GlobalDNS
-    - proxy_rule_set:
-        match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list"
-        value: GlobalDNS
-    - domain_keyword:
-        match: "copilot"
-        value: GlobalDNS
-    - domain_suffix:
-        match: "bing.com"
-        value: GlobalDNS
-        
-    # ==========================================
-    # 4. 宏观规则集映射 (完美对齐 rules 分流)
-    # ==========================================
+    # 第三层：国内大网分流 (接管剩余国内流量)
     - proxy_rule_set:
         match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax.list"
         value: AliDNS
+        
+    # 第四层：国际大网分流 (接管已知国外流量，防污染)
     - proxy_rule_set:
         match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global.list"
         value: GlobalDNS
         
-    # ==========================================
-    # 5. 终极兜底 (对齐 rules 的 🌐 全局策略)
-    # ==========================================
+    # 第五层：终极兜底 (未知流量默认走国外防污染，完美对齐 rules 全局代理)
     - wildcard:
         match: "*"
         value: GlobalDNS
@@ -166,7 +145,7 @@ policy_groups:
       type: select
       # ⚠️ 请在手机 Egern 端本地修改此处的真实订阅链接
       urls:
-        - "https://INSERT_YOUR_SUB_URL_HERE"
+        - "请在此处填写真实的订阅链接，多个订阅在下边再添加"
       hidden: true
 
   # === 1. 顶层面板 ===
