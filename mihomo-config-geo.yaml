@@ -298,19 +298,19 @@ rules:
   # --- 阶段二：去广告大闸 ---
   - RULE-SET,reject,REJECT                     # 强效拦截国内外追踪器与流氓广告
   
-  # --- 阶段三：GeoData 极速宏观直连接管 (免检通道) ---
+  # --- 阶段三：特定外网服务硬编码指向 (确保精确入轨) ---
+  - GEOSITE,github,🌐 全局策略
+  - GEOSITE,netflix,🌐 全局策略
+  - GEOSITE,reddit,🌐 全局策略
+  - GEOSITE,twitch,🌐 全局策略
+  
+  # --- 阶段四：GeoData 极速宏观直连接管 (免检通道) ---
   - GEOSITE,private,DIRECT                     # 局域网流量直连
   - GEOSITE,apple,DIRECT                       # 苹果服务直连 (App Store 等)
   - GEOSITE,onedrive,DIRECT                    # OneDrive 同步直连
   - GEOSITE,microsoft@cn,DIRECT                # 微软中国区服务直连
   - GEOSITE,microsoft,DIRECT                   # 微软全局直连 (如 Windows 更新、Xbox 下载)
   - GEOSITE,cn,DIRECT                          # 国内网站极速直连 (涵盖数十万个中国域名)
-  
-  # --- 阶段四：特定外网服务硬编码指向 (确保精确入轨) ---
-  - GEOSITE,github,🌐 全局策略
-  - GEOSITE,netflix,🌐 全局策略
-  - GEOSITE,reddit,🌐 全局策略
-  - GEOSITE,twitch,🌐 全局策略
   
   # --- 阶段五：GeoData 外网全家桶与兜底 ---
   - GEOSITE,google,🌐 全局策略
