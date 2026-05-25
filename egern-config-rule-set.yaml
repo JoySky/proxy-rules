@@ -1,87 +1,74 @@
 # ====================================================
-# Egern 纯血原生版 (GitHub 安全托管 + QUIC 拦截防漏)
+# Egern 终极完全体 (底层优化 + BM7 规则 + 订阅解耦)
 # ====================================================
 
 # ----------------------------------------------------
-# 1. 基础设定
+# 1. 全局基础设定 (针对 iOS 深度优化)
 # ----------------------------------------------------
-# 是否启用 IPv6。默认值是 false
-ipv6: true
+auto_update:
+  url: "https://你的github_raw链接" # 替换为你在 GitHub 上的真实 Raw 链接
+  interval: 86400
 
-# 核心：全局阻断 QUIC(UDP 443)，强迫大厂广告降级为 TCP，从而被规则精准拦截
-block_quic: true 
-# HTTP 代理端口号。默认值是 3080
+ipv6: true                  # 强烈建议开启，目前国内三大运营商蜂窝网络已全面普及 IPv6
 http_port: 3080
-
-# SOCKS 代理端口号。默认值是 3090
 socks_port: 3090
-
-# 允许外部连接通过 Wi-Fi 访问设备上的代理。默认值是 false
 allow_external_connections: false
-
-# 仅虚拟网接口模式。默认值是 false
 vif_only: false
 
-# 使用真实 IP 的域名列表（不使用 Fake IP）。默认值是空数组
+# 核心防漏网机制：全局阻断 QUIC (UDP 443)，迫使 YouTube/国内大厂的广告流量降级为 TCP，从而被规则精准拦截
+block_quic: true
+
+# 绕过虚拟网卡的私有网段 (节省系统性能)
+bypass_tunnel_proxy:
+  - "*.local"
+  - "*.lan"
+  - "127.0.0.0/8"
+  - "192.168.0.0/16"
+  - "10.0.0.0/8"
+  - "172.16.0.0/12"
+
+# 真实 IP 域名列表 (极其重要：绕过 Fake IP，防止苹果推送和局域网设备断连)
 real_ip_domains:
   - "*.lan"
-  - "*.push.apple.com"
-# 隐藏 VPN 图标。默认值是 false
+  - "*.local"
+  - "*.apple.com"
+  - "*.push.apple.com"      # 保证 iOS 消息推送秒速到达
+  - "*.msftconnecttest.com"
+  - "*.msftncsi.com"
+
 hide_vpn_icon: false
 
-# 劫持 DNS 的地址列表。默认值是空数组
+# 劫持设备的所有 DNS 请求交由 Egern 处理
 hijack_dns:
   - '*'
 
-# 指定自定义的 GeoIP 数据库 URL。默认值是空
-geoip_db_url: null
-
-# 指定自定义的 ASN 数据库 URL。默认值是空
-asn_db_url: null
-
-# 自定义的代理延迟测试 URL。默认值是空
-proxy_latency_test_url: null
-
-# 自定义的直连延迟测试 URL。默认值是空
-direct_latency_test_url: null
-
-# 兼容路由模式。默认值是 false
-compat_route: false
-
-# 包含所有网络流量。默认值是 false
-include_all_networks: false
-
-# 包含 APNs 流量（需 include_all_networks 启用）。默认值是 false
-include_apns: false
-
-# 包含蜂窝网络服务流量（需 include_all_networks 启用）。默认值是 false
-include_cellular_services: false
-
-# 包含本地网络流量（需 include_all_networks 启用）。默认值是 false
-include_local_networks: false
-
-# 虚拟接口包含的路由。默认值是空数组
-vif_included_routes:
-  - 192.168.0.1/32
-
-# 虚拟接口排除的路由。默认值是空数组
-vif_excluded_routes:
-  - 192.168.0.1/32
-  
 # ----------------------------------------------------
-# 2. DNS 设定
+# 2. DNS 路由引擎 (原生分流解析)
 # ----------------------------------------------------
 dns:
   bootstrap:
     - system
+    - 223.5.5.5             # 增加阿里云公共 DNS 作为系统引导防线
   upstreams:
-    default_doh:
+    domestic_doh:           # 定义国内高可用 DoH 组
       - https://dns.alidns.com/dns-query
       - https://doh.pub/dns-query
   forward:
+    # 第一层：精确匹配国内域名后缀，直连国内 DoH
+    - domain_suffix:
+        match: "cn"
+        value: domestic_doh
     - wildcard:
         match: '*.cn'
-        value: bootstrap
+        value: domestic_doh
+    # 第二层：调用 BM7 的 ChinaMax 列表，实现国内百万级域名的精准解析防污染
+    - proxy_rule_set:
+        match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax.list"
+        value: domestic_doh
+    # 第三层：兜底解析 (配合下方的规则，国外域名会交由节点远程解析，无需担心污染)
+    - wildcard:
+        match: '*'
+        value: domestic_doh
 
 # ----------------------------------------------------
 # 3. 策略组架构 (订阅分离，动态正则抓取)
@@ -185,12 +172,20 @@ policy_groups:
 # 4. 黄金分流规则 (全系 Blackmatrix7 list，最高解析效率)
 # ----------------------------------------------------
 rules:
-  # --- 阶段一：硬编码急救层 ---
+  # --- 阶段一：强制硬编码层 (保留无外部库及越权覆盖的例外) ---
+  
+  # 1. Apple 越权覆盖
   - domain_suffix:
       match: push.apple.com
       policy: 🌐 全局策略
   - domain_suffix:
       match: apple-relay.apple.com
+      policy: 🤖 AI 策略
+  - domain_suffix:
+      match: cdn-smoot.apple.com
+      policy: 🤖 AI 策略
+  - domain_suffix:
+      match: smoot.apple.com
       policy: 🤖 AI 策略
   - domain:
       match: gspe1-ssl.ls.apple.com
@@ -198,65 +193,114 @@ rules:
   - domain_keyword:
       match: apple-relay
       policy: 🤖 AI 策略
+  - domain:
+      match: guzzoni.apple.com
+      policy: 🤖 AI 策略
+
+  # 2. 缺失独立库的硬编码补充 (Copilot 与 xAI)
   - domain_keyword:
       match: copilot
       policy: 🤖 AI 策略
+  - domain_suffix:
+      match: x.ai
+      policy: 🤖 AI 策略
+  - domain_suffix:
+      match: grok.com
+      policy: 🤖 AI 策略
 
-  # --- 阶段二：微观应用层 ---
+  # --- 阶段二：应用规则管控 (核心 AI 与防耗流) ---
+  
+  # 1. AI 工具精准分流 (全系 Blackmatrix7)
   - rule_set:
       match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list"
       policy: 🤖 AI 策略
       update_interval: 86400
   - rule_set:
-      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Anthropic/Anthropic.list"
+      # 注：Anthropic 在 BM7 中归属于 Claude
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list"
       policy: 🤖 AI 策略
       update_interval: 86400
   - rule_set:
       match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list"
       policy: 🤖 AI 策略
       update_interval: 86400
+
+  # 2. 测速软件强制直连 (BM7)
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Speedtest/Speedtest.list"
+      policy: DIRECT
+      update_interval: 86400
+
+  # 3. 强效拦截国内外流氓广告 (使用 Loyalsoldier 替补)
+  - rule_set:
+      match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/reject.txt"
+      policy: REJECT
+      update_interval: 86400
+
+  # 4. Apple 全局直连兜底 (放在这里防止拦截重要服务)
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple.list"
+      policy: DIRECT
+      update_interval: 86400
+
+  # --- 阶段四：国际社交、流媒体与核心开发 (全系 Blackmatrix7) ---
   - rule_set:
       match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list"
       policy: 🌐 全局策略
       update_interval: 86400
   - rule_set:
-      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Netflix/Netflix.list"
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/YouTube/YouTube.list"
+      policy: 🌐 全局策略
+      update_interval: 86400
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Google/Google.list"
       policy: 🌐 全局策略
       update_interval: 86400
   - rule_set:
       match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Telegram/Telegram.list"
       policy: 🌐 全局策略
       update_interval: 86400
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Twitter/Twitter.list"
+      policy: 🌐 全局策略
+      update_interval: 86400
+  - rule_set:
+      match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Netflix/Netflix.list"
+      policy: 🌐 全局策略
+      update_interval: 86400
 
-  # 注：已遵循你的指示，将去广告 (Reject) 等功能移除，交由 Egern 模块单独配置。
-
-  # --- 阶段三：宏观直连与外网兜底 (纯血 Blackmatrix7) ---
-  # ChinaMax：国内域名极其详尽的直连白名单
+  # --- 阶段五：宏观接管与精简兜底 ---
+  
+  # 1. 国内网站极速直连 (BM7 ChinaMax)
   - rule_set:
       match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax.list"
-      policy: 🎯 直连策略
+      policy: DIRECT
       update_interval: 86400
-  # Global：外网服务与被墙域名的兜底黑名单
+      
+  # 2. 全球非中国域名宽泛兜底 (BM7 Global 完美替代 geolocation-!cn)
   - rule_set:
       match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global.list"
       policy: 🌐 全局策略
       update_interval: 86400
 
-  # --- 阶段四：底层局域网与 IP 兜底 (零内存开销) ---
+  # 3. 局域网与国内 IP 兜底 (使用原生零内存机制)
   - ip_cidr:
       match: 192.168.0.0/16
-      policy: 🎯 直连策略
+      policy: DIRECT
+      no_resolve: true
   - ip_cidr:
       match: 10.0.0.0/8
-      policy: 🎯 直连策略
+      policy: DIRECT
+      no_resolve: true
   - ip_cidr:
       match: 172.16.0.0/12
       policy: 🎯 直连策略
+      no_resolve: true
   - geoip:
       match: CN
-      policy: 🎯 直连策略
+      policy: DIRECT
       no_resolve: true
-  
-  # --- 阶段五：终极网兜 ---
+
+  # --- 阶段六：终极网兜 ---
   - default:
       policy: 🌐 全局策略
