@@ -6,7 +6,7 @@
 # 1. 全局基础设定 (针对 iOS 深度优化)
 # ----------------------------------------------------
 auto_update:
-  url: "https://你的github_raw链接" # 替换为你在 GitHub 上的真实 Raw 链接
+  url: "https://raw.githubusercontent.com/JoySky/proxy-rules/refs/heads/main/egern-config-rule-set.yaml" # 替换为你在 GitHub 上的真实 Raw 链接
   interval: 86400
 
 ipv6: true                  # 强烈建议开启，目前国内三大运营商蜂窝网络已全面普及 IPv6
