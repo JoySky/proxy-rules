@@ -44,17 +44,16 @@ hijack_dns:
 dns:
   public_ip_lookup_url: "https://ifconfig.me/ip"
   upstreams:
-    # 核心修改：全部换成纯 IP，彻底干掉 dns.alidns.com 这种域名，解析速度达到物理极限
     AliDNS:
-      - "https://223.5.5.5/dns-query"
+      - "https://dns.alidns.com/dns-query"
     DNSPod:
-      - "https://1.12.12.12/dns-query"
+      - "https://doh.pub/dns-query"
     GlobalDNS:
       - "https://1.1.1.1/dns-query"
       - "https://8.8.8.8/dns-query"
     LocalDNS:
       - system
-      
+    
   forward:
     # ==========================================
     # 第一层：局域网物理直连 (绝对优先，防断网)
@@ -126,21 +125,11 @@ dns:
         value: GlobalDNS
     - proxy_rule_set:
         match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list"
-        value: GlobalDNS
-    # 第三层：国内大网分流 (接管剩余国内流量)
-    - proxy_rule_set:
-        match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax.list"
-        value: AliDNS
-        
-    # 第四层：国际大网分流 (接管已知国外流量，防污染)
-    - proxy_rule_set:
-        match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Global/Global.list"
-        value: GlobalDNS
-        
+        value: GlobalDNS  
     # 第五层：终极兜底 (未知流量默认走国外防污染，完美对齐 rules 全局代理)
     - wildcard:
         match: "*"
-        value: GlobalDNS
+        value: Default
 # ----------------------------------------------------
 # 3. 策略组架构 (订阅分离，动态正则抓取)
 # ----------------------------------------------------
@@ -266,12 +255,6 @@ policy_groups:
 # 4. 黄金分流规则 (全系 Blackmatrix7 list)
 # ----------------------------------------------------
 rules:
-  # ====================================================
-  # --- 阶段零：基础设施绝对直连 (修复 DNS 报错的核心) ---
-  # ====================================================
-  - ip_cidr: { match: 223.5.5.5/32, policy: DIRECT, no_resolve: true }
-  - ip_cidr: { match: 1.12.12.12/32, policy: DIRECT, no_resolve: true }
-  - ip_cidr: { match: 119.29.29.29/32, policy: DIRECT, no_resolve: true }
   # 1. Apple Intelligence (Apple AI 强制走代理防宕机)
   - domain_suffix: { match: apple-relay.apple.com, policy: 🤖 AI 策略 }
   - domain_suffix: { match: cdn-smoot.apple.com, policy: 🤖 AI 策略 }
