@@ -43,15 +43,12 @@ hijack_dns:
 # ----------------------------------------------------
 dns:
   public_ip_lookup_url: "https://ifconfig.me/ip"
-  bootstrap:
-    - system
-    - 223.5.5.5
-    - 119.29.29.29
   upstreams:
+    # 核心修改：全部换成纯 IP，彻底干掉 dns.alidns.com 这种域名，解析速度达到物理极限
     AliDNS:
-      - "https://dns.alidns.com/dns-query"
+      - "https://223.5.5.5/dns-query"
     DNSPod:
-      - "https://doh.pub/dns-query"
+      - "https://1.12.12.12/dns-query"
     GlobalDNS:
       - "https://1.1.1.1/dns-query"
       - "https://8.8.8.8/dns-query"
@@ -260,6 +257,17 @@ policy_groups:
 # 4. 黄金分流规则 (全系 Blackmatrix7 list)
 # ----------------------------------------------------
 rules:
+  # === 0. 基础设施直连 (修复 Hysteria2 阻断与 DNS 解析失败的核心开关) ===
+  # 明确告诉代理节点：这几个国内 DNS 的 IP，直接走物理网络出去，绝不走代理！
+  - ip_cidr:
+      match: "223.5.5.5/32"
+      policy: DIRECT
+  - ip_cidr:
+      match: "1.12.12.12/32"
+      policy: DIRECT
+  - ip_cidr:
+      match: "119.29.29.29/32"
+      policy: DIRECT
   # 1. Apple Intelligence (Apple AI 强制走代理防宕机)
   - domain_suffix: { match: apple-relay.apple.com, policy: 🤖 AI 策略 }
   - domain_suffix: { match: cdn-smoot.apple.com, policy: 🤖 AI 策略 }
