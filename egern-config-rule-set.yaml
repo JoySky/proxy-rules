@@ -44,8 +44,8 @@ hijack_dns:
 dns:
   public_ip_lookup_url: "https://ifconfig.me/ip"
   proxy_nameservers:
-    - https://8.8.8.8/dns-query
-    - https://1.1.1.1/dns-query
+    - 223.5.5.5
+    - 119.29.29.29
   bootstrap:
     - system
     - 223.5.5.5
