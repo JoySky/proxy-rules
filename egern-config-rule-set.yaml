@@ -103,7 +103,7 @@ dns:
       
     # 3. 精准应用投递 (腾讯系)
     - domain_suffix: 
-        match:qq.com
+        match: qq.com
         value: DNSPod
     - domain_suffix: 
         match: wechat.com
