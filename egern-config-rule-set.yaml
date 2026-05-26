@@ -347,10 +347,13 @@ mitm:
 modules:
   - name: AdvertisingLite
     url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/Surge/AdvertisingLite/AdvertisingLite.sgmodule
+    update_interval: 86400
     enabled: true
   - name: Sub-Store
     url: https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/Egern.yaml
+    update_interval: 86400
     enabled: true
   - name: YouTube.Enhance
     url: https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/YouTube.Enhance.sgmodule
+    update_interval: 86400
     enabled: true
