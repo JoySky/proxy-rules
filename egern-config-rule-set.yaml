@@ -359,22 +359,22 @@ rules:
   - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/icloud.txt", policy: DIRECT, update_interval: 86400 }
   
   # =========================================================
-  # 7. 国内大网兜底 (Loyalsoldier 极限查表性能版 direct.txt)
-  # =========================================================
-  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/direct.txt", policy: DIRECT, update_interval: 86400 }
-  
-  # =========================================================
-  # 8. 国外代理 (按需添加 Proxy，排除 GFW)
+  # 7. 国外代理 (按需添加 Proxy，排除 GFW)
   # =========================================================
   - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/proxy.txt", policy: 🌐 全局策略, update_interval: 86400 }
 
   # =========================================================
+  # 8. 国内大网兜底 (Loyalsoldier 极限查表性能版 direct.txt)
+  # =========================================================
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/direct.txt", policy: DIRECT, update_interval: 86400 }
+  
+  # =========================================================
   # 9. GeoIP 物理兜底 (终极防线)
-  # 注意：已移除 no_resolve，允许其触发 DNS 解析来判定未知域名的真实归属地
   # =========================================================
   - geoip: { match: CN, policy: DIRECT, no_resolve: true }
+  
   # =========================================================
-  # 9. 终极兜底 (FINAL)
+  # 10. 白名单终极兜底 (FINAL)
   # =========================================================
   - default: { policy: 🌐 全局策略 }
 
