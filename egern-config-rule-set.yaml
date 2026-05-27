@@ -122,16 +122,24 @@ dns:
     - domain_suffix:
         match: "tencent.com"
         value: DNSPod  
+    # --- 增加国内dns ---
+    - proxy_rule_set:
+        match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/direct.txt"
+        value: AliDNS
+        update_interval: 86400
     # --- AI 专属解析 (防污染，降延迟) ---
     - proxy_rule_set:
         match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list"
         value: GlobalDNS
+        update_interval: 86400
     - proxy_rule_set:
         match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list"
         value: GlobalDNS
+        update_interval: 86400
     - proxy_rule_set:
         match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list"
         value: GlobalDNS
+        update_interval: 86400
 
     # 第五层：默认
     - wildcard:
