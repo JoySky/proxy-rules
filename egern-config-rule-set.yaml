@@ -37,29 +37,38 @@ hide_vpn_icon: false
 # 劫持设备的所有 DNS 请求交由 Egern 处理
 hijack_dns:
   - '*'
+# 测速 URL
+proxy_latency_test_url: http://www.gstatic.com/generate_204
+direct_latency_test_url: http://www.apple.com/library/test/success.html
 
 # ----------------------------------------------------
 # 2. DNS 路由引擎 (原生分流解析)
 # ----------------------------------------------------
 dns:
-  public_ip_lookup_url: "https://ifconfig.me/ip"
-  proxy_nameservers:
-    - 223.5.5.5
-    - 119.29.29.29
+  public_ip_lookup_url: https://ifconfig.me/ip
   bootstrap:
     - system
     - 223.5.5.5
     - 119.29.29.29
   upstreams:
     AliDNS:
-      - "https://dns.alidns.com/dns-query"
+      - h3://dns.alidns.com/dns-query
+      - https://dns.alidns.com/dns-query
+      - 223.5.5.5
     DNSPod:
-      - "https://doh.pub/dns-query"
+      - https://doh.pub/dns-query
+      - 119.29.29.29
     GlobalDNS:
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
+      - https://1.1.1.1/dns-query
+      - https://8.8.8.8/dns-query
     LocalDNS:
       - system
+    DefaultDNS:
+      - h3://dns.alidns.com/dns-query
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+      - 223.5.5.5
+      - 119.29.29.29
     
   forward:
     # ==========================================
@@ -144,7 +153,7 @@ dns:
     # 第五层：默认
     - wildcard:
         match: "*"
-        value: Default
+        value: DefaultDNS
 # ----------------------------------------------------
 # 3. 策略组架构 (订阅分离，动态正则抓取)
 # ----------------------------------------------------
