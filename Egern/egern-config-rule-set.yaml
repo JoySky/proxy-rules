@@ -252,7 +252,7 @@ policy_groups:
         - 🇺🇸 美国节点
         - 🇹🇼 台湾节点
         - 🇰🇷 韩国节点
-      icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bot.png
+      icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png
       
   # === 6. 直连策略 ===
   - select:
