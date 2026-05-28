@@ -70,7 +70,7 @@ dns:
       - https://8.8.8.8/dns-query
     LocalDNS:
       - system
-    FinalDNS:
+    DefaultDNS:
       - h3://dns.alidns.com/dns-query
       - https://dns.alidns.com/dns-query
       - https://doh.pub/dns-query
@@ -176,7 +176,7 @@ dns:
     # 第五层：默认
     - wildcard:
         match: "*"
-        value: FinalDNS
+        value: DefaultDNS
 # ----------------------------------------------------
 # 3. 策略组架构 (订阅分离，动态正则抓取)
 # ----------------------------------------------------
