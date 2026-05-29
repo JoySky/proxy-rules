@@ -270,7 +270,7 @@ proxy-groups:
     interval: 300
     tolerance: 50
     include-all: true
-    exclude-filter: "(?i)🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|kr|HK|TW|SG|JP|US|KR|香港|台湾|新加坡|日本|韩国|美国|到期|通知|测试|官网|剩余|流量|QQ群|TG群|更新|重置"
+    exclude-filter: "(?i)🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|🇰🇷|HK|TW|SG|JP|US|KR|香港|台湾|新加坡|日本|韩国|美国|到期|通知|测试|官网|剩余|流量|QQ群|TG群|更新|重置"
 
 # ----------------------------------------------------
 # 8. 外部规则集拉取 (Loyalsoldier 强大去广告/分流库)
