@@ -168,7 +168,7 @@ policy_groups:
   - fallback:
       name: 🛡️ 稳定策略
       interval: 600
-      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png"
+      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available.png"
       policies:
         - 🇭🇰 香港节点      
         - 🇯🇵 日本节点      
@@ -183,7 +183,7 @@ policy_groups:
       name: 🚀 极速策略
       interval: 600
       tolerance: 100
-      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Rocket.png"
+      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png"
       policies:
         - 🇭🇰 香港节点
         - 🇯🇵 日本节点
@@ -209,7 +209,7 @@ policy_groups:
   # === 5. AI 专属 ===
   - select:
       name: 🤖 AI 策略
-      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png"
+      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bot.png"
       policies:
         - 🇯🇵 日本节点
         - 🇸🇬 新加坡节点
