@@ -119,6 +119,8 @@ proxy-groups:
       - 🇸🇬 新加坡节点    
       - 🇹🇼 台湾节点
       - 🇺🇸 美国节点
+      - 🇰🇷 韩国节点
+      - 🌍 其他节点
       
  # === 3. 自动切换面板 ===
   - name: 🚀 极速策略
@@ -133,6 +135,7 @@ proxy-groups:
       - 🇸🇬 新加坡节点
       - 🇹🇼 台湾节点
       - 🇺🇸 美国节点
+      - 🇰🇷 韩国节点
       - 🌍 其他节点
       
   # === 4. 手动面板 ===
@@ -144,6 +147,7 @@ proxy-groups:
       - 🇸🇬 新加坡节点
       - 🇹🇼 台湾节点
       - 🇺🇸 美国节点
+      - 🇰🇷 韩国节点
       - 🌍 其他节点
   
   # === 5. AI 专属 ===
@@ -154,6 +158,7 @@ proxy-groups:
       - 🇸🇬 新加坡节点
       - 🇺🇸 美国节点
       - 🇹🇼 台湾节点
+      - 🇰🇷 韩国节点
       
   # === 6. 直连策略 ===    
   - name: 🎯 直连策略
@@ -198,6 +203,15 @@ proxy-groups:
     include-all: true
     filter: "(?i)🇹🇼|TW|台湾|Taiwan"
 
+  - name: 🇰🇷 韩国节点
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 100
+    lazy: true
+    include-all: true
+    filter: "(?i)kr|KR|韩国|Korea"
+
   - name: 🇺🇸 美国节点
     type: url-test
     url: http://www.gstatic.com/generate_204
@@ -210,7 +224,7 @@ proxy-groups:
   - name: 🌍 其他节点
     type: select
     include-all: true
-    exclude-filter: "(?i)🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|HK|TW|SG|JP|US|香港|台湾|新加坡|日本|美国|到期|通知|官网|剩余|流量|QQ群|TG群|更新|重置"
+    exclude-filter: "(?i)🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|🇰🇷|HK|TW|SG|JP|US|KR|香港|台湾|新加坡|日本|韩国|美国|到期|通知|测试|官网|剩余|流量|QQ群|TG群|更新|重置"
 
 # ----------------------------------------------------
 # 7. 嗅探功能 (精准识别流媒体与硬编码 IP)
