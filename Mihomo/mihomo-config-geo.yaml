@@ -167,6 +167,8 @@ proxy-groups:
       - 🇸🇬 新加坡节点    
       - 🇹🇼 台湾节点
       - 🇺🇸 美国节点
+      - kr 韩国节点
+      - 🌍 其他节点
 
   # === 3. 自动切换面板 ===
   - name: 🚀 极速策略
@@ -180,6 +182,7 @@ proxy-groups:
       - 🇸🇬 新加坡节点
       - 🇹🇼 台湾节点
       - 🇺🇸 美国节点
+      - kr 韩国节点
       - 🌍 其他节点
 
   # === 4. 手动面板 ===
@@ -191,6 +194,7 @@ proxy-groups:
       - 🇯🇵 日本节点
       - 🇸🇬 新加坡节点
       - 🇺🇸 美国节点
+      - kr 韩国节点
       - 🌍 其他节点
       
   # === 5. AI 专属 (保持不变) ===
@@ -201,6 +205,7 @@ proxy-groups:
       - 🇺🇸 美国节点
       - 🇸🇬 新加坡节点
       - 🇹🇼 台湾节点
+      - kr 韩国节点
       
   # === 6. 直连策略 ===
   - name: 🎯 直连策略
@@ -240,6 +245,14 @@ proxy-groups:
     tolerance: 50
     include-all: true
     filter: "(?i)🇹🇼|TW|台湾|Taiwan"
+
+  - name: kr 韩国节点
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    include-all: true
+    filter: "(?i)kr|KR|韩国|Korea"
 
   - name: 🇺🇸 美国节点
     type: url-test
