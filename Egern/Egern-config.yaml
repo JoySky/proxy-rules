@@ -389,34 +389,46 @@ mitm:
 # ------------------------------------------------------------------------------
 # 6. 模块配置 (Modules)
 # ------------------------------------------------------------------------------
-modules:
-  - url: "https://raw.githubusercontent.com/jnlaoshu/MySelf/refs/heads/main/Egern/Module/MapAdBlock.yaml"
-    enabled: true
+Modules:
+  - url: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Module/Panel/Stream-All/Moore/Stream-All.sgmodule
     update_interval: 86400
-
-  - url: "https://raw.githubusercontent.com/jnlaoshu/MySelf/master/Egern/Widget/GasPrice.yaml"
     enabled: true
+
+  - url: https://github.com/Maasea/sgmodule/blob/master/Bilibili.Helper.sgmodule?raw=true
+    update_interval: 86400
+    enabled: true
+
+  - url: https://raw.githubusercontent.com/jnlaoshu/MySelf/refs/heads/main/Egern/Module/MapAdBlock.yaml
+    update_interval: 86400
+    enabled: true
+
+  - url: https://raw.githubusercontent.com/jnlaoshu/MySelf/master/Egern/Widget/GasPrice.yaml
     env:
-      GAS_REGION: "liaoning/dalian"
+      GAS_REGION: liaoning/dalian
     update_interval: 86400
-
-  - url: "https://raw.githubusercontent.com/jnlaoshu/MySelf/master/Egern/Widget/NetworkInfo.yaml"
     enabled: true
-    update_interval: 86400
 
-  - name: "AdvertisingLite"
-    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/Surge/AdvertisingLite/AdvertisingLite.sgmodule"
-    enabled: true
+  - url: https://raw.githubusercontent.com/jnlaoshu/MySelf/master/Egern/Widget/NetworkInfo.yaml
     update_interval: 86400
+    enabled: true
 
-  - name: "Sub-Store"
-    url: "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/Egern.yaml"
-    enabled: true
+  - name: AdvertisingLite
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/Surge/AdvertisingLite/AdvertisingLite.sgmodule
     update_interval: 86400
+    enabled: true
 
-  - name: "YouTube.Enhance"
-    url: "https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/YouTube.Enhance.sgmodule"
-    enabled: true
-    update_interval: 86400
+  - name: YouTube.Enhance
+    url: https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/YouTube.Enhance.sgmodule
     compat_arguments:
       屏蔽Shorts按钮: "true"
+    update_interval: 86400
+    enabled: true
+
+  - url: https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.surge.sgmodule
+    update_interval: 86400
+    enabled: true
+
+  - name: Sub-Store
+    url: https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/Egern.yaml
+    update_interval: 86400
+    enabled: true
