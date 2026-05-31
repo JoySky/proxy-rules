@@ -403,8 +403,6 @@ Modules:
     enabled: true
 
   - url: https://raw.githubusercontent.com/jnlaoshu/MySelf/master/Egern/Widget/GasPrice.yaml
-    env:
-      GAS_REGION: liaoning/dalian
     update_interval: 86400
     enabled: true
 
