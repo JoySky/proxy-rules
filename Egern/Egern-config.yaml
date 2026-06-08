@@ -394,7 +394,7 @@ Modules:
     update_interval: 86400
     enabled: true
 
-  - url: https://github.com/Maasea/sgmodule/blob/master/Bilibili.Helper.sgmodule?raw=true
+  - url: https://github.com/kokoryh/Sparkle/raw/refs/heads/master/release/surge/module/bilibili.sgmodule
     update_interval: 86400
     enabled: true
 
