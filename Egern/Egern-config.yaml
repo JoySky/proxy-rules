@@ -398,7 +398,7 @@ Modules:
     update_interval: 86400
     enabled: true
 
-  - url: https://raw.githubusercontent.com/jnlaoshu/MySelf/refs/heads/main/Egern/Module/MapAdBlock.yaml
+  - url: https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule
     update_interval: 86400
     enabled: true
 
