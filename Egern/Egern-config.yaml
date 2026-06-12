@@ -402,6 +402,10 @@ Modules:
     update_interval: 86400
     enabled: true
 
+  - url: https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Reddit%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule
+    update_interval: 86400
+    enabled: true    
+
   - url: https://raw.githubusercontent.com/jnlaoshu/MySelf/master/Egern/Widget/GasPrice.yaml
     update_interval: 86400
     enabled: true
