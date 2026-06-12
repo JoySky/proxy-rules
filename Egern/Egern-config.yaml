@@ -434,6 +434,10 @@ Modules:
     url: https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/Egern.yaml
     update_interval: 86400
     enabled: true
+    
+# ------------------------------------------------------------------------------
+# 7. 脚本配置 (Scriptings)
+# ------------------------------------------------------------------------------
 Scriptings:
   - generic:
       name: 机场订阅流量监控小组件
