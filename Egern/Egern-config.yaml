@@ -434,3 +434,16 @@ Modules:
     url: https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/Egern.yaml
     update_interval: 86400
     enabled: true
+Scriptings:
+  - generic:
+      name: 机场订阅流量监控小组件
+      script_url: https://raw.githubusercon.com/mickeu/Egern/refs/heads/main/Sub_Widget_Y.JS
+      env:
+        NAME1: "填写第一个机场的显示名称"
+        URL1: "填写第一个机场的订阅链接"
+        RESET1: "填写第一个机场的重置日（例如：'1'）"
+        NAME2: "填写第二个机场的显示名称"
+        URL2: "填写第二个机场的订阅链接"
+        RESET2: "填写第二个机场的重置日（例如：'1'）"
+      update_interval: 86400
+    
