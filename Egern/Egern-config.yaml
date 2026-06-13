@@ -105,36 +105,37 @@ dns:
     
     # --- 第三层：AI 专属 DNS 解析 (硬编码制导 -> GlobalDNS) ---
     # 🍎 Apple (Siri、Apple Intelligence 及防风控组件)
-    # - domain_keyword: { match: "apple-relay", value: GlobalDNS }
-    # - domain: { match: "gspe1-ssl.ls.apple.com", value: GlobalDNS }
-    # - domain: { match: "guzzoni.apple.com", value: GlobalDNS }
-    # - domain_suffix: { match: "apple-relay.apple.com", value: GlobalDNS }
-    # - domain_suffix: { match: "cdn-smoot.apple.com", value: GlobalDNS }
-    # - domain_suffix: { match: "smoot.apple.com", value: GlobalDNS }
-    # - domain_suffix: { match: "apple-intelligence.apple.com", value: GlobalDNS }
+    - domain_keyword: { match: "apple-relay", value: GlobalDNS }
+    - domain: { match: "gspe1-ssl.ls.apple.com", value: GlobalDNS }
+    - domain: { match: "guzzoni.apple.com", value: GlobalDNS }
+    - domain_suffix: { match: "apple-relay.apple.com", value: GlobalDNS }
+    - domain_suffix: { match: "cdn-smoot.apple.com", value: GlobalDNS }
+    - domain_suffix: { match: "smoot.apple.com", value: GlobalDNS }
+    - domain_suffix: { match: "apple-intelligence.apple.com", value: GlobalDNS }
 
     # 🪟 Microsoft (Copilot、Bing 及 Azure OpenAI 专线)
-    # - domain_keyword: { match: "copilot", value: GlobalDNS }
-    # - domain_suffix: { match: "bing.com", value: GlobalDNS }
-    # - domain_suffix: { match: "openai.azure.com", value: GlobalDNS }
+    - domain_keyword: { match: "copilot", value: GlobalDNS }
+    - domain_suffix: { match: "bing.com", value: GlobalDNS }
+    - domain_suffix: { match: "openai.azure.com", value: GlobalDNS }
 
     # 🚀 Google (Gemini 核心 API 与开发者控制台)
-    # - domain_suffix: { match: "generativelanguage.googleapis.com", value: GlobalDNS }
-    # - domain_suffix: { match: "ai.google.dev", value: GlobalDNS }
-    # - domain_suffix: { match: "makersuite.google.com", value: GlobalDNS }
+    - domain_suffix: { match: "generativelanguage.googleapis.com", value: GlobalDNS }
+    - domain_suffix: { match: "ai.google.dev", value: GlobalDNS }
+    - domain_suffix: { match: "makersuite.google.com", value: GlobalDNS }
 
     # 🧠 Anthropic (Claude 网页版前端核心域名)
-    # - domain_keyword: { match: "robinfrontend", value: GlobalDNS }
+    - domain_keyword: { match: "robinfrontend", value: GlobalDNS }
 
     # ✖️ xAI (马斯克的 Grok)
-    # - domain_suffix: { match: "x.ai", value: GlobalDNS }
-    # - domain_suffix: { match: "grok.com", value: GlobalDNS }
+    - domain_suffix: { match: "x.ai", value: GlobalDNS }
+    - domain_suffix: { match: "grok.com", value: GlobalDNS }
     
     # --- 第四层：Proxy 的引用 ---
-    # - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", value: GlobalDNS, update_interval: 86400 }
-    # - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", value: GlobalDNS, update_interval: 86400 }
-    # - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", value: GlobalDNS, update_interval: 86400 }
-    # - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", value: GlobalDNS, update_interval: 86400 }
+    
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", value: GlobalDNS, update_interval: 86400 }
 
     # --- 第五层：默认兜底 ---
     - domain_wildcard: { match: "*", value: DefaultDNS }
