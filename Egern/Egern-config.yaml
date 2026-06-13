@@ -57,10 +57,8 @@ dns:
   # 1. 阿里与腾讯的传统纯 IP UDP DNS (最强短跑冠军，0 延迟瞬间解析机场)
     - 223.5.5.5
     - 119.29.29.29
-  
   # 2. 系统的本地运营商 DNS ( system 关键字非常关键，直接读取你当前 Wi-Fi 或 5G 分配的默认 DNS)
     - system
-  
   # 3. 加密后备通道 (当前面的纯 IP 被运营商劫持或出故障时，用国内最顶级的加密 DoH 兜底)
     - h3://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
@@ -165,7 +163,7 @@ dns:
     # --- 5. 第五层：最终默认兜底 ---
     # 遇到 .cn 顶级域名，不查库，直接光速交由国内解析
     - domain_suffix: { match: "cn", value: ChinaDNS }
-    - domain_wildcard: { match: "*", value: ChinaDNS }
+    - domain_wildcard: { match: "*", value: GlobalDNS }
 
 # ------------------------------------------------------------------------------
 # 3. 策略组架构 (订阅分离，动态正则抓取)
