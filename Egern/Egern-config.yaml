@@ -156,7 +156,7 @@ dns:
     # --- 第五层：默认兜底 ---
     # [新增] 遇到 .cn 顶级域名，不查库，直接光速交由国内解析
     - domain_suffix: { match: "cn", value: DomesticDNS }
-    - domain_wildcard: { match: "*.cn", value: DomesticDNS }  
+    # - domain_wildcard: { match: "*.cn", value: DomesticDNS }  
     - domain_wildcard: { match: "*", value: DomesticDNS }
 
 
