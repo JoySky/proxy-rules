@@ -1,0 +1,65 @@
+{
+  "colors" : {
+    "accent" : {
+      "dark" : "#3EB28D",
+      "light" : "#0CA678"
+    },
+    "background" : {
+      "dark" : "#111614",
+      "light" : "#F2F9F6"
+    },
+    "blue" : {
+      "dark" : "#579DE6",
+      "light" : "#1A8CFF"
+    },
+    "cyan" : {
+      "dark" : "#3FB5C9",
+      "light" : "#05B2D4"
+    },
+    "green" : {
+      "dark" : "#4BCE83",
+      "light" : "#15A852"
+    },
+    "groupedBackground" : {
+      "dark" : "#111614",
+      "light" : "#F2F9F6"
+    },
+    "indigo" : {
+      "dark" : "#7C73F0",
+      "light" : "#4F46E5"
+    },
+    "orange" : {
+      "dark" : "#FFB057",
+      "light" : "#F57C00"
+    },
+    "purple" : {
+      "dark" : "#B388FF",
+      "light" : "#8B5CF6"
+    },
+    "red" : {
+      "dark" : "#FC7D7B",
+      "light" : "#E3342F"
+    },
+    "secondaryGroupedBackground" : {
+      "dark" : "#1A211E",
+      "light" : "#FFFFFF"
+    },
+    "tabBarBackground" : {
+      "dark" : "#1A211E",
+      "light" : "#FFFFFF"
+    },
+    "teal" : {
+      "dark" : "#5AC8B4",
+      "light" : "#0D9488"
+    },
+    "tertiaryGroupedBackground" : {
+      "dark" : "#232E29",
+      "light" : "#FFFFFF"
+    },
+    "yellow" : {
+      "dark" : "#FCD34D",
+      "light" : "#D97706"
+    }
+  },
+  "name" : "薄荷"
+}
