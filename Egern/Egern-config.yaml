@@ -72,7 +72,7 @@ dns:
       - https://8.8.8.8/dns-query
     LocalDNS:
       - system
-    DefaultDNS:
+    DomesticDNS:
       - h3://dns.alidns.com/dns-query
       - https://dns.alidns.com/dns-query
       - https://doh.pub/dns-query
@@ -84,6 +84,15 @@ dns:
     - domain_suffix: { match: "local", value: LocalDNS }
     - domain_suffix: { match: "lan", value: LocalDNS }
     - domain_suffix: { match: "home.arpa", value: LocalDNS }
+
+    # [新增] 解决公共 Wi-Fi 无法弹出登录页面的问题
+    - domain: { match: "captive.apple.com", value: LocalDNS }
+    - domain: { match: "gsp1.apple.com", value: LocalDNS }
+    - domain: { match: "www.apple.com", value: LocalDNS } 
+    # [新增] 防止 DoH 域名解析死锁
+    - domain: { match: "dns.alidns.com", value: LocalDNS }
+    - domain: { match: "doh.pub", value: LocalDNS }
+    - domain: { match: "cloudflare-dns.com", value: LocalDNS }
     
     # --- 第二层：精准厂商投递 (保障核心 App 秒开) ---
     # 阿里系
@@ -103,12 +112,11 @@ dns:
     - domain_suffix: { match: "weixin.com", value: DNSPod }
     - domain_suffix: { match: "tencent.com", value: DNSPod }
     
-    # --- 第三层：AI 专属 DNS 解析 (硬编码制导 -> GlobalDNS) ---
+    # === 第三层：AI 特权与硬编码 (防误杀最高优先级) ===
     # 🍎 Apple (Siri、Apple Intelligence 及防风控组件)
     - domain_keyword: { match: "apple-relay", value: GlobalDNS }
     - domain: { match: "gspe1-ssl.ls.apple.com", value: GlobalDNS }
     - domain: { match: "guzzoni.apple.com", value: GlobalDNS }
-    - domain_suffix: { match: "apple-relay.apple.com", value: GlobalDNS }
     - domain_suffix: { match: "cdn-smoot.apple.com", value: GlobalDNS }
     - domain_suffix: { match: "smoot.apple.com", value: GlobalDNS }
     - domain_suffix: { match: "apple-intelligence.apple.com", value: GlobalDNS }
@@ -131,14 +139,16 @@ dns:
     - domain_suffix: { match: "grok.com", value: GlobalDNS }
     
     # --- 第四层：Proxy 的引用 ---
-    
-    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", value: GlobalDNS, update_interval: 86400 }
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", value: GlobalDNS, update_interval: 86400 }
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", value: GlobalDNS, update_interval: 86400 }
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", value: GlobalDNS, update_interval: 86400 }
-
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt", value: DomesticDNS, update_interval: 86400 }
+    
     # --- 第五层：默认兜底 ---
-    - domain_wildcard: { match: "*", value: DefaultDNS }
+    # [新增] 遇到 .cn 顶级域名，不查库，直接光速交由国内解析
+    - domain_suffix: { match: "cn", value: DomesticDNS }
+    - domain_wildcard: { match: "*", value: DomesticDNS }
 
 
 # ------------------------------------------------------------------------------
