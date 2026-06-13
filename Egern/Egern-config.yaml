@@ -137,7 +137,7 @@ dns:
     # - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", value: GlobalDNS, update_interval: 86400 }
 
     # --- 第五层：默认兜底 ---
-    - wildcard: { match: "*", value: DefaultDNS }
+    - domain_wildcard: { match: "*", value: DefaultDNS }
 
 
 # ------------------------------------------------------------------------------
