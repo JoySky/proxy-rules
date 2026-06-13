@@ -120,6 +120,7 @@ dns:
     - domain_suffix: { match: "cdn-smoot.apple.com", value: GlobalDNS }
     - domain_suffix: { match: "smoot.apple.com", value: GlobalDNS }
     - domain_suffix: { match: "apple-intelligence.apple.com", value: GlobalDNS }
+    - domain_suffix: { match: "genai.apple.com", value: GlobalDNS }
 
     # 🪟 Microsoft (Copilot、Bing 及 Azure OpenAI 专线)
     - domain_keyword: { match: "copilot", value: GlobalDNS }
@@ -130,10 +131,13 @@ dns:
     - domain_suffix: { match: "generativelanguage.googleapis.com", value: GlobalDNS }
     - domain_suffix: { match: "ai.google.dev", value: GlobalDNS }
     - domain_suffix: { match: "makersuite.google.com", value: GlobalDNS }
+    - domain_suffix: { match: "gemini.google.com", value: GlobalDNS }
 
     # 🧠 Anthropic (Claude 网页版前端核心域名)
+    - domain_suffix: { match: "claude.ai", value: GlobalDNS }
+    - domain_suffix: { match: "anthropic.com", value: GlobalDNS }
     - domain_keyword: { match: "robinfrontend", value: GlobalDNS }
-
+    
     # ✖️ xAI (马斯克的 Grok)
     - domain_suffix: { match: "x.ai", value: GlobalDNS }
     - domain_suffix: { match: "grok.com", value: GlobalDNS }
