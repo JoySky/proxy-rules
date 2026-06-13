@@ -67,18 +67,20 @@ dns:
     - system 
   upstreams:
     AliDNS:
+      - 223.5.5.5 
       - h3://dns.alidns.com/dns-query
       - https://dns.alidns.com/dns-query
-      - 223.5.5.5
+
     DNSPod:
-      - https://doh.pub/dns-query
       - 119.29.29.29
+      - https://doh.pub/dns-query
     ChinaDNS:
+      - 223.5.5.5
+      - 119.29.29.29    
       - h3://dns.alidns.com/dns-query
       - https://dns.alidns.com/dns-query
       - https://doh.pub/dns-query
-      - 223.5.5.5
-      - 119.29.29.29
+
     GlobalDNS:
       - https://1.1.1.1/dns-query
       - https://8.8.8.8/dns-query
