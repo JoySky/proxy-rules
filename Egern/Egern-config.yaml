@@ -78,6 +78,12 @@ dns:
       - 119.29.29.29
       
   forward:
+    # === [补齐 1] DNS 级去广告 (光速斩断广告解析请求，省电省流) ===
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/reject.txt", value: reject, update_interval: 86400 }
+
+    # === [补齐 2] 路由器与内网域名大全 (确保所有路由器后台都能打开) ===
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/private.txt", value: LocalDNS, update_interval: 86400 }
+
     # --- 第一层：局域网物理直连 (绝对优先，防断网) ---
     - domain_suffix: { match: "local", value: LocalDNS }
     - domain_suffix: { match: "lan", value: LocalDNS }
