@@ -158,15 +158,17 @@ dns:
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", value: GlobalDNS, update_interval: 86400 }
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", value: GlobalDNS, update_interval: 86400 }
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", value: GlobalDNS, update_interval: 86400 }
+    # 👇 新增：防 DNS 污染安全网，匹配境外顶级域名与被墙域名，强制走海外加密 DNS 解析
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/tld-not-cn.txt", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt", value: GlobalDNS, update_interval: 86400 }
     
     # [最后匹配] 国内常规网站大盘
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt", value: ChinaDNS, update_interval: 86400 }
     
     # --- 5. 第五层：最终默认兜底 ---
-    # 遇到 .cn 顶级域名，不查库，直接光速交由国内解析
+    # 遇到.cn 顶级域名，不查库，直接光速交由国内解析
     - domain_suffix: { match: "cn", value: ChinaDNS }
     - domain_wildcard: { match: "*", value: GlobalDNS }
-
 # ------------------------------------------------------------------------------
 # 3. 策略组架构 (订阅分离，动态正则抓取)
 # ------------------------------------------------------------------------------
