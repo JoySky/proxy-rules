@@ -321,14 +321,16 @@ policy_groups:
 # 4. 黄金分流规则 (全系 Loyalsoldier list)
 # ------------------------------------------------------------------------------
 rules:
-  # === 1. 垃圾焚烧炉 (Loyalsoldier 极限性能版) ===
-  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/reject.txt", policy: REJECT, update_interval: 86400 }
-
-  # === 2. 局域网物理直连 (必须置顶！防止内网数据被代理引擎干扰) ===
+  # === 1. 核心系统、局域网与苹果服务物理直连 (必须置顶！防止内网数据被代理引擎干扰与防苹果风控) ===
   - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/private.txt", policy: DIRECT, update_interval: 86400 }
   - ip_cidr: { match: "192.168.0.0/16", policy: DIRECT, no_resolve: true }
   - ip_cidr: { match: "10.0.0.0/8", policy: DIRECT, no_resolve: true }
   - ip_cidr: { match: "172.16.0.0/12", policy: DIRECT, no_resolve: true }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt", policy: DIRECT, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/icloud.txt", policy: DIRECT, update_interval: 86400 }
+
+  # === 2. 垃圾焚烧炉 (Loyalsoldier 极限性能版) ===
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/reject.txt", policy: REJECT, update_interval: 86400 }
 
   # === 3. AI 特权与硬编码 (防误杀最高优先级) ===
   # 🍎 Apple (Siri、Apple Intelligence 及防风控组件)
@@ -376,14 +378,14 @@ rules:
   - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/WeChat/WeChat.list", policy: DIRECT, update_interval: 86400 }
   - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Speedtest/Speedtest.list", policy: DIRECT, update_interval: 86400 }
 
-  # === 6. 苹果服务直连 (Loyalsoldier 纯净域名集) ===
-  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt", policy: DIRECT, update_interval: 86400 }
-  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/icloud.txt", policy: DIRECT, update_interval: 86400 }
-  
-  # === 7. 国外代理 (按需添加 Proxy，排除 GFW) ===
+  # === 6. 国外代理 (按需添加 Proxy，排除 GFW) ===
   - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", policy: 🌐 全局策略, update_interval: 86400 }
   - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/telegramcidr.txt", policy: 🌐 全局策略, no_resolve: true, update_interval: 86400 }
-  
+
+  # === 7. 防 DNS 污染安全网 (新增补充：境外/被墙域名强制代理，彻底剥夺本地 DNS 解析权) ===
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/tld-not-cn.txt", policy: 🌐 全局策略, no_resolve: true, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt", policy: 🌐 全局策略, no_resolve: true, update_interval: 86400 }
+
   # === 8. 国内大网兜底 (Loyalsoldier 极限查表性能版 direct.txt) ===
   - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt", policy: DIRECT, update_interval: 86400 }
   
@@ -395,7 +397,6 @@ rules:
   
   # === 10. 白名单终极兜底 (FINAL) ===
   - default: { policy: 🌐 全局策略 }
-
 
 # ------------------------------------------------------------------------------
 # 5. 中间人攻击 (MITM) 配置
