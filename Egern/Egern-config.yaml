@@ -194,7 +194,7 @@ policy_groups:
         
    # === 2. AI 专属 ===
   - select:
-      name: 🤖 AI 策略
+      name: 🤖 人工智能
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bot.png"
       policies:
         - 🇯🇵 日本节点
@@ -345,35 +345,35 @@ rules:
 
   # === 3. AI 特权与硬编码 (防误杀最高优先级) ===
   # 🍎 Apple (Siri、Apple Intelligence 及防风控组件)
-  - domain_keyword: { match: "apple-relay", policy: 🤖 AI 策略 }
-  - domain: { match: "gspe1-ssl.ls.apple.com", policy: 🤖 AI 策略 }
-  - domain: { match: "guzzoni.apple.com", policy: 🤖 AI 策略 }
-  # - domain_suffix: { match: "apple-relay.apple.com", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "cdn-smoot.apple.com", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "smoot.apple.com", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "apple-intelligence.apple.com", policy: 🤖 AI 策略 }
+  - domain_keyword: { match: "apple-relay", policy: 🤖 人工智能 }
+  - domain: { match: "gspe1-ssl.ls.apple.com", policy: 🤖 人工智能 }
+  - domain: { match: "guzzoni.apple.com", policy: 🤖 人工智能 }
+  # - domain_suffix: { match: "apple-relay.apple.com", policy: 🤖 人工智能 }
+  - domain_suffix: { match: "cdn-smoot.apple.com", policy: 🤖 人工智能 }
+  - domain_suffix: { match: "smoot.apple.com", policy: 🤖 人工智能 }
+  - domain_suffix: { match: "apple-intelligence.apple.com", policy: 🤖 人工智能 }
 
   # 🪟 Microsoft (Copilot、Bing 及 Azure OpenAI 专线)
-  - domain_keyword: { match: "copilot", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "bing.com", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "openai.azure.com", policy: 🤖 AI 策略 }
+  - domain_keyword: { match: "copilot", policy: 🤖 人工智能 }
+  - domain_suffix: { match: "bing.com", policy: 🤖 人工智能 }
+  - domain_suffix: { match: "openai.azure.com", policy: 🤖 人工智能 }
 
   # 🚀 Google (Gemini 核心 API 与开发者控制台)
-  - domain_suffix: { match: "generativelanguage.googleapis.com", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "ai.google.dev", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "makersuite.google.com", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "generativelanguage.googleapis.com", policy: 🤖 人工智能 }
+  - domain_suffix: { match: "ai.google.dev", policy: 🤖 人工智能 }
+  - domain_suffix: { match: "makersuite.google.com", policy: 🤖 人工智能 }
 
   # 🧠 Anthropic (Claude 网页版前端核心域名)
-  - domain_keyword: { match: "robinfrontend", policy: 🤖 AI 策略 }
+  - domain_keyword: { match: "robinfrontend", policy: 🤖 人工智能 }
 
   # ✖️ xAI (马斯克的 Grok)
-  - domain_suffix: { match: "x.ai", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "grok.com", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "x.ai", policy: 🤖 人工智能 }
+  - domain_suffix: { match: "grok.com", policy: 🤖 人工智能 }
   
   # === 4. AI 规则集 (Blackmatrix7 独立精调版) ===
-  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", policy: 🤖 AI 策略, update_interval: 86400 }
-  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", policy: 🤖 AI 策略, update_interval: 86400 }
-  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", policy: 🤖 AI 策略, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", policy: 🤖 人工智能, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", policy: 🤖 人工智能, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", policy: 🤖 人工智能, update_interval: 86400 }
 
   # === 5. VIP 直通车 (金融机构、阿里、微信、测速 - 防风控绝对直连) ===
   # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/BOC/BOC.list", policy: DIRECT, update_interval: 86400 }
