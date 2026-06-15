@@ -254,15 +254,20 @@ policy_groups:
         - DIRECT
 
   # === 7. 漏网之鱼 ===
-  - select:
+  - auto_test:
       name: 🐟 漏网之鱼
+      hidden: true
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png"
+      interval: 600
+      tolerance: 100
       policies:
-        - 🛡️ 稳定策略
-        - 🚀 急速策略
-        - 🕹️ 手动策略
-        - 🤖 AI 策略
-        - 🎯 直连策略
+        - 🇭🇰 香港节点
+        - 🇯🇵 日本节点
+        - 🇸🇬 新加坡节点
+        - 🇹🇼 台湾节点
+        - 🇰🇷 韩国节点
+        - 🇺🇸 美国节点
+        - 🌍 其他节点
         
   # === 8. 地区节点动态抓取 (引用总阀门 + 展开 + 过滤) ===
   - auto_test:
