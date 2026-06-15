@@ -188,15 +188,15 @@ policy_groups:
       name: 🌐 网络出口
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png"
       policies:
-        - 🛡️ 稳定策略
-        - 🚀 急速策略
-        - 🕹️ 手动策略
-        - 🤖 AI 策略
-        - 🎯 直连策略
+        - 🛡️ 稳定连接
+        - 🚀 自动测速
+        - 🕹️ 手动选择
+        - 🤖 AI 通道
+        - 🎯 本地直连
         
   # === 2. AI 专属 ===
   - select:
-      name: 🤖 AI 策略
+      name: 🤖 AI 通道
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bot.png"
       policies:
         - 🇯🇵 日本节点
@@ -207,7 +207,7 @@ policy_groups:
         
   # === 3. 终极主路由：区域故障转移 ===
   - fallback:
-      name: 🛡️ 稳定策略
+      name: 🛡️ 稳定连接
       interval: 600
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available.png"
       policies:
@@ -221,7 +221,7 @@ policy_groups:
         
   # === 4. 自动切换面板 ===
   - auto_test:
-      name: 🚀 急速策略
+      name: 🚀 自动测速
       interval: 600
       tolerance: 100
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png"
@@ -236,7 +236,7 @@ policy_groups:
         
   # === 5. 手动面板 ===
   - select:
-      name: 🕹️ 手动策略
+      name: 🕹️ 手动选择
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Proxy.png"
       policies:
         - 🇭🇰 香港节点
@@ -247,9 +247,9 @@ policy_groups:
         - 🇺🇸 美国节点
         - 🌍 其他节点
         
-  # === 6. 直连策略 ===
+  # === 6. 本地直连 ===
   - select:
-      name: 🎯 直连策略
+      name: 🎯 本地直连
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Direct.png"
       policies:
         - DIRECT
@@ -344,35 +344,35 @@ rules:
 
   # === 3. AI 特权与硬编码 (防误杀最高优先级) ===
   # 🍎 Apple (Siri、Apple Intelligence 及防风控组件)
-  - domain_keyword: { match: "apple-relay", policy: 🤖 AI 策略 }
-  - domain: { match: "gspe1-ssl.ls.apple.com", policy: 🤖 AI 策略 }
-  - domain: { match: "guzzoni.apple.com", policy: 🤖 AI 策略 }
-  # - domain_suffix: { match: "apple-relay.apple.com", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "cdn-smoot.apple.com", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "smoot.apple.com", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "apple-intelligence.apple.com", policy: 🤖 AI 策略 }
+  - domain_keyword: { match: "apple-relay", policy: 🤖 AI 通道 }
+  - domain: { match: "gspe1-ssl.ls.apple.com", policy: 🤖 AI 通道 }
+  - domain: { match: "guzzoni.apple.com", policy: 🤖 AI 通道 }
+  # - domain_suffix: { match: "apple-relay.apple.com", policy: 🤖 AI 通道 }
+  - domain_suffix: { match: "cdn-smoot.apple.com", policy: 🤖 AI 通道 }
+  - domain_suffix: { match: "smoot.apple.com", policy: 🤖 AI 通道 }
+  - domain_suffix: { match: "apple-intelligence.apple.com", policy: 🤖 AI 通道 }
 
   # 🪟 Microsoft (Copilot、Bing 及 Azure OpenAI 专线)
-  - domain_keyword: { match: "copilot", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "bing.com", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "openai.azure.com", policy: 🤖 AI 策略 }
+  - domain_keyword: { match: "copilot", policy: 🤖 AI 通道 }
+  - domain_suffix: { match: "bing.com", policy: 🤖 AI 通道 }
+  - domain_suffix: { match: "openai.azure.com", policy: 🤖 AI 通道 }
 
   # 🚀 Google (Gemini 核心 API 与开发者控制台)
-  - domain_suffix: { match: "generativelanguage.googleapis.com", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "ai.google.dev", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "makersuite.google.com", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "generativelanguage.googleapis.com", policy: 🤖 AI 通道 }
+  - domain_suffix: { match: "ai.google.dev", policy: 🤖 AI 通道 }
+  - domain_suffix: { match: "makersuite.google.com", policy: 🤖 AI 通道 }
 
   # 🧠 Anthropic (Claude 网页版前端核心域名)
-  - domain_keyword: { match: "robinfrontend", policy: 🤖 AI 策略 }
+  - domain_keyword: { match: "robinfrontend", policy: 🤖 AI 通道 }
 
   # ✖️ xAI (马斯克的 Grok)
-  - domain_suffix: { match: "x.ai", policy: 🤖 AI 策略 }
-  - domain_suffix: { match: "grok.com", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "x.ai", policy: 🤖 AI 通道 }
+  - domain_suffix: { match: "grok.com", policy: 🤖 AI 通道 }
   
   # === 4. AI 规则集 (Blackmatrix7 独立精调版) ===
-  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", policy: 🤖 AI 策略, update_interval: 86400 }
-  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", policy: 🤖 AI 策略, update_interval: 86400 }
-  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", policy: 🤖 AI 策略, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", policy: 🤖 AI 通道, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", policy: 🤖 AI 通道, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", policy: 🤖 AI 通道, update_interval: 86400 }
 
   # === 5. VIP 直通车 (金融机构、阿里、微信、测速 - 防风控绝对直连) ===
   # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/BOC/BOC.list", policy: DIRECT, update_interval: 86400 }
