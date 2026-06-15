@@ -336,20 +336,20 @@ policy_groups:
 rules:
   # === 0. 强制所有海外 DNS (IP 与 DoH) 走代理，彻底杜绝本地解析死锁 ===
   # Cloudflare 体系
-  - ip_cidr: { match: "1.1.1.1/32", policy: 🌐 网络出口, no_resolve: true }
-  - ip_cidr: { match: "1.0.0.1/32", policy: 🌐 网络出口, no_resolve: true }
-  - domain: { match: "cloudflare-dns.com", policy: 🌐 网络出口 }
+  #- ip_cidr: { match: "1.1.1.1/32", policy: 🌐 网络出口, no_resolve: true }
+  #- ip_cidr: { match: "1.0.0.1/32", policy: 🌐 网络出口, no_resolve: true }
+  #- domain: { match: "cloudflare-dns.com", policy: 🌐 网络出口 }
   
   # Google 体系
-  - ip_cidr: { match: "8.8.8.8/32", policy: 🌐 网络出口, no_resolve: true }
-  - ip_cidr: { match: "8.8.4.4/32", policy: 🌐 网络出口, no_resolve: true }
-  - domain: { match: "dns.google", policy: 🌐 网络出口 }
+  #- ip_cidr: { match: "8.8.8.8/32", policy: 🌐 网络出口, no_resolve: true }
+  #- ip_cidr: { match: "8.8.4.4/32", policy: 🌐 网络出口, no_resolve: true }
+  #- domain: { match: "dns.google", policy: 🌐 网络出口 }
   
   # Quad9 与 OpenDNS 体系 (如果你未来用到)
-  - ip_cidr: { match: "9.9.9.9/32", policy: 🌐 网络出口, no_resolve: true }
-  - ip_cidr: { match: "149.112.112.112/32", policy: 🌐 网络出口, no_resolve: true }
-  - ip_cidr: { match: "208.67.222.222/32", policy: 🌐 网络出口, no_resolve: true }
-  - ip_cidr: { match: "208.67.220.220/32", policy: 🌐 网络出口, no_resolve: true }
+  #- ip_cidr: { match: "9.9.9.9/32", policy: 🌐 网络出口, no_resolve: true }
+  #- ip_cidr: { match: "149.112.112.112/32", policy: 🌐 网络出口, no_resolve: true }
+  #- ip_cidr: { match: "208.67.222.222/32", policy: 🌐 网络出口, no_resolve: true }
+  #- ip_cidr: { match: "208.67.220.220/32", policy: 🌐 网络出口, no_resolve: true }
 
   # === 1. 核心系统、局域网与苹果服务物理直连 (必须置顶！防止内网数据被代理引擎干扰与防苹果风控) ===
   - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/private.txt", policy: DIRECT, update_interval: 86400 }
