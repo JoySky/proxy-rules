@@ -428,52 +428,52 @@ mitm:
 # ------------------------------------------------------------------------------
 # 6. 模块配置 (Modules)
 # ------------------------------------------------------------------------------
+widgets:
+  - name: 订阅流量监控
+    script_name: 订阅流量监控小组件
 modules:
-  - url: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Module/Panel/Stream-All/Moore/Stream-All.sgmodule
+  - url: https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/%E4%BA%AC%E4%B8%9C%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule
     update_interval: 86400
     enabled: true
-
-  - url: https://github.com/kokoryh/Sparkle/raw/refs/heads/master/release/surge/module/bilibili.sgmodule
+  - url: https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Reddit%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule
     update_interval: 86400
     enabled: true
-
   - url: https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule
     update_interval: 86400
     enabled: true
-
-  - url: https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Reddit%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule
-    update_interval: 86400
-    enabled: true    
-
-  - url: https://raw.githubusercontent.com/jnlaoshu/MySelf/master/Egern/Widget/GasPrice.yaml
+  - url: https://github.com/kokoryh/Sparkle/raw/refs/heads/master/release/surge/module/bilibili.sgmodule
     update_interval: 86400
     enabled: true
-
+  - url: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Module/Panel/Stream-All/Moore/Stream-All.sgmodule
+    update_interval: 86400
+    enabled: true
+  - url: https://raw.githubusercontent.com/jnlaoshu/MySelf/master/Egern/Widget/GasPrice.yaml
+    update_interval: 86400
+    env:
+      GAS_REGION: liaoning/dalian
+    enabled: true
   - url: https://raw.githubusercontent.com/jnlaoshu/MySelf/master/Egern/Widget/NetworkInfo.yaml
     update_interval: 86400
     enabled: true
-
   - name: AdvertisingLite
     url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/Surge/AdvertisingLite/AdvertisingLite.sgmodule
     update_interval: 86400
     enabled: true
-
   - name: YouTube.Enhance
     url: https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/YouTube.Enhance.sgmodule
     compat_arguments:
-      屏蔽Shorts按钮: "true"
+      屏蔽Shorts按钮: 'true'
     update_interval: 86400
     enabled: true
-
   - url: https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.surge.sgmodule
     update_interval: 86400
     enabled: true
-
+  - url: https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.surge.sgmodule
+    update_interval: 86400
+    enabled: true
   - name: Sub-Store
     url: https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/Egern.yaml
     update_interval: 86400
-    enabled: true
-    
 # ------------------------------------------------------------------------------
 # 7. 脚本配置 (Scriptings)
 # ------------------------------------------------------------------------------
