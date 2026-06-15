@@ -47,7 +47,6 @@ geoip_db_url: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Coun
 proxy_latency_test_url: "http://www.gstatic.com/generate_204"
 direct_latency_test_url: "http://www.apple.com/library/test/success.html"
 
-
 # ------------------------------------------------------------------------------
 # 2. DNS 路由引擎 (原生分流解析)
 # ------------------------------------------------------------------------------
@@ -170,6 +169,7 @@ dns:
     # 遇到.cn 顶级域名，不查库，直接光速交由国内解析
     - domain_suffix: { match: "cn", value: ChinaDNS }
     - domain_wildcard: { match: "*", value: GlobalDNS }
+
 # ------------------------------------------------------------------------------
 # 3. 策略组架构 (订阅分离，动态正则抓取)
 # ------------------------------------------------------------------------------
@@ -261,8 +261,6 @@ policy_groups:
       policies:
         - DIRECT
 
-  
-                  
   # === 8. 地区节点动态抓取 (引用总阀门 + 展开 + 过滤) ===
   - auto_test:
       name: 🇭🇰 香港节点
@@ -396,11 +394,10 @@ rules:
   # === 7. 国外代理 (按需添加 Proxy，排除 GFW) ===
   - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", policy: 🌐 网络出口, update_interval: 86400 }
   
-
   # === 8. 国内大网兜底 (Loyalsoldier 极限查表性能版 direct.txt) ===
   - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt", policy: DIRECT, update_interval: 86400 }
   
-  # 跟下边的geoip重复了
+  # 针对下方已有的 geoip，此处进行注释规避
   # - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt", policy: DIRECT, no_resolve: true, update_interval: 86400 }
   
   # === 9. GeoIP 物理兜底 (终极防线) ===
@@ -423,7 +420,6 @@ mitm:
       - "*.live.com"
       - "*.office.com"
       - "*.apple.com"
-
 
 # ------------------------------------------------------------------------------
 # 6. 模块配置 (Modules)
@@ -474,6 +470,7 @@ modules:
   - name: Sub-Store
     url: https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/Egern.yaml
     update_interval: 86400
+
 # ------------------------------------------------------------------------------
 # 7. 脚本配置 (Scriptings)
 # ------------------------------------------------------------------------------
@@ -489,4 +486,3 @@ scriptings:
         URL2: "填写第二个机场的订阅链接"
         RESET2: "填写第二个机场的重置日（例如：'1'）"
       update_interval: 86400
-    
