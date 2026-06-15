@@ -184,17 +184,18 @@ policy_groups:
        
   # === 1. 顶层面板 ===
   - select:
-      name: 🌐 代理模式
+      name: 🌐 网络出口
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png"
       policies:
-        - 🛡️ 稳定模式
-        - 🚀 自动模式
-        - 🕹️ 手动模式
-        - 🎯 直连模式
+        - 🛡️ 稳定策略
+        - 🚀 急速策略
+        - 🕹️ 手动策略
+        - 🤖 AI 策略
+        - 🎯 直连策略
         
    # === 2. AI 专属 ===
   - select:
-      name: 🤖 人工智能
+      name: 🤖 AI 策略
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bot.png"
       policies:
         - 🇯🇵 日本节点
@@ -205,7 +206,7 @@ policy_groups:
         
   # === 3. 终极主路由：区域故障转移 ===
   - fallback:
-      name: 🛡️ 稳定模式
+      name: 🛡️ 稳定策略
       interval: 600
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available.png"
       policies:
@@ -219,7 +220,7 @@ policy_groups:
       
   # === 4. 自动切换面板 ===
   - auto_test:
-      name: 🚀 自动模式
+      name: 🚀 急速策略
       interval: 600
       tolerance: 100
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png"
@@ -234,7 +235,7 @@ policy_groups:
       
   # === 5. 手动面板 ===
   - select:
-      name: 🕹️ 手动模式
+      name: 🕹️ 手动策略
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Proxy.png"
       policies:
         - 🇭🇰 香港节点
@@ -247,7 +248,7 @@ policy_groups:
       
   # === 6. 直连策略 ===
   - select:
-      name: 🎯 直连模式
+      name: 🎯 直连策略
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Direct.png"
       policies:
         - DIRECT
@@ -256,10 +257,11 @@ policy_groups:
       name: 🐟 漏网之鱼
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png"
       policies:
-        - 🛡️ 稳定模式
-        - 🚀 自动模式
-        - 🕹️ 手动模式
-        - 🎯 直连模式
+        - 🛡️ 稳定策略
+        - 🚀 急速策略
+        - 🕹️ 手动策略
+        - 🤖 AI 策略
+        - 🎯 直连策略
       
   # === 8. 地区节点动态抓取 (引用总阀门 + 展开 + 过滤) ===
   - auto_test:
@@ -351,35 +353,35 @@ rules:
 
   # === 3. AI 特权与硬编码 (防误杀最高优先级) ===
   # 🍎 Apple (Siri、Apple Intelligence 及防风控组件)
-  - domain_keyword: { match: "apple-relay", policy: 🤖 人工智能 }
-  - domain: { match: "gspe1-ssl.ls.apple.com", policy: 🤖 人工智能 }
-  - domain: { match: "guzzoni.apple.com", policy: 🤖 人工智能 }
-  # - domain_suffix: { match: "apple-relay.apple.com", policy: 🤖 人工智能 }
-  - domain_suffix: { match: "cdn-smoot.apple.com", policy: 🤖 人工智能 }
-  - domain_suffix: { match: "smoot.apple.com", policy: 🤖 人工智能 }
-  - domain_suffix: { match: "apple-intelligence.apple.com", policy: 🤖 人工智能 }
+  - domain_keyword: { match: "apple-relay", policy: 🤖 AI 策略 }
+  - domain: { match: "gspe1-ssl.ls.apple.com", policy: 🤖 AI 策略 }
+  - domain: { match: "guzzoni.apple.com", policy: 🤖 AI 策略 }
+  # - domain_suffix: { match: "apple-relay.apple.com", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "cdn-smoot.apple.com", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "smoot.apple.com", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "apple-intelligence.apple.com", policy: 🤖 AI 策略 }
 
   # 🪟 Microsoft (Copilot、Bing 及 Azure OpenAI 专线)
-  - domain_keyword: { match: "copilot", policy: 🤖 人工智能 }
-  - domain_suffix: { match: "bing.com", policy: 🤖 人工智能 }
-  - domain_suffix: { match: "openai.azure.com", policy: 🤖 人工智能 }
+  - domain_keyword: { match: "copilot", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "bing.com", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "openai.azure.com", policy: 🤖 AI 策略 }
 
   # 🚀 Google (Gemini 核心 API 与开发者控制台)
-  - domain_suffix: { match: "generativelanguage.googleapis.com", policy: 🤖 人工智能 }
-  - domain_suffix: { match: "ai.google.dev", policy: 🤖 人工智能 }
-  - domain_suffix: { match: "makersuite.google.com", policy: 🤖 人工智能 }
+  - domain_suffix: { match: "generativelanguage.googleapis.com", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "ai.google.dev", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "makersuite.google.com", policy: 🤖 AI 策略 }
 
   # 🧠 Anthropic (Claude 网页版前端核心域名)
-  - domain_keyword: { match: "robinfrontend", policy: 🤖 人工智能 }
+  - domain_keyword: { match: "robinfrontend", policy: 🤖 AI 策略 }
 
   # ✖️ xAI (马斯克的 Grok)
-  - domain_suffix: { match: "x.ai", policy: 🤖 人工智能 }
-  - domain_suffix: { match: "grok.com", policy: 🤖 人工智能 }
+  - domain_suffix: { match: "x.ai", policy: 🤖 AI 策略 }
+  - domain_suffix: { match: "grok.com", policy: 🤖 AI 策略 }
   
   # === 4. AI 规则集 (Blackmatrix7 独立精调版) ===
-  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", policy: 🤖 人工智能, update_interval: 86400 }
-  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", policy: 🤖 人工智能, update_interval: 86400 }
-  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", policy: 🤖 人工智能, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", policy: 🤖 AI 策略, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", policy: 🤖 AI 策略, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", policy: 🤖 AI 策略, update_interval: 86400 }
 
   # === 5. VIP 直通车 (金融机构、阿里、微信、测速 - 防风控绝对直连) ===
   # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/BOC/BOC.list", policy: DIRECT, update_interval: 86400 }
@@ -396,12 +398,12 @@ rules:
   - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Speedtest/Speedtest.list", policy: DIRECT, update_interval: 86400 }
 
   # === 6. 国外代理 (按需添加 Proxy，排除 GFW) ===
-  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", policy: 🌐 代理模式, update_interval: 86400 }
-  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/telegramcidr.txt", policy: 🌐 代理模式, no_resolve: true, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", policy: 🌐 网络出口, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/telegramcidr.txt", policy: 🌐 网络出口, no_resolve: true, update_interval: 86400 }
 
   # === 7. 防 DNS 污染安全网 (新增补充：境外/被墙域名强制代理，彻底剥夺本地 DNS 解析权) ===
-  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/tld-not-cn.txt", policy: 🌐 代理模式, no_resolve: true, update_interval: 86400 }
-  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt", policy: 🌐 代理模式, no_resolve: true, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/tld-not-cn.txt", policy: 🌐 网络出口, no_resolve: true, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt", policy: 🌐 网络出口, no_resolve: true, update_interval: 86400 }
 
   # === 8. 国内大网兜底 (Loyalsoldier 极限查表性能版 direct.txt) ===
   - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt", policy: DIRECT, update_interval: 86400 }
