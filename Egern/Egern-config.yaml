@@ -190,10 +190,20 @@ policy_groups:
         - 🛡️ 稳定策略
         - 🚀 极速策略
         - 🕹️ 手动策略
-        - 🤖 AI 策略
         - 🎯 直连策略
-      
-  # === 2. 终极主路由：区域故障转移 ===
+        
+   # === 2. AI 专属 ===
+  - select:
+      name: 🤖 AI 策略
+      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bot.png"
+      policies:
+        - 🇯🇵 日本节点
+        - 🇸🇬 新加坡节点
+        - 🇺🇸 美国节点
+        - 🇹🇼 台湾节点
+        - 🇰🇷 韩国节点
+        
+  # === 3. 终极主路由：区域故障转移 ===
   - fallback:
       name: 🛡️ 稳定策略
       interval: 600
@@ -207,7 +217,7 @@ policy_groups:
         - 🇺🇸 美国节点
         - 🌍 其他节点
       
-  # === 3. 自动切换面板 ===
+  # === 4. 自动切换面板 ===
   - auto_test:
       name: 🚀 极速策略
       interval: 600
@@ -222,7 +232,7 @@ policy_groups:
         - 🇺🇸 美国节点
         - 🌍 其他节点
       
-  # === 4. 手动面板 ===
+  # === 5. 手动面板 ===
   - select:
       name: 🕹️ 手动策略
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Proxy.png"
@@ -234,17 +244,6 @@ policy_groups:
         - 🇰🇷 韩国节点
         - 🇺🇸 美国节点
         - 🌍 其他节点
-      
-  # === 5. AI 专属 ===
-  - select:
-      name: 🤖 AI 策略
-      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bot.png"
-      policies:
-        - 🇯🇵 日本节点
-        - 🇸🇬 新加坡节点
-        - 🇺🇸 美国节点
-        - 🇹🇼 台湾节点
-        - 🇰🇷 韩国节点
       
   # === 6. 直连策略 ===
   - select:
