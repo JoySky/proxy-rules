@@ -260,15 +260,8 @@ policy_groups:
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png"
       interval: 600
       tolerance: 100
-      policies:
-        - 🇭🇰 香港节点
-        - 🇯🇵 日本节点
-        - 🇸🇬 新加坡节点
-        - 🇹🇼 台湾节点
-        - 🇰🇷 韩国节点
-        - 🇺🇸 美国节点
-        - 🌍 其他节点
-        
+      policies: [✈️ 机场订阅]
+      
   # === 8. 地区节点动态抓取 (引用总阀门 + 展开 + 过滤) ===
   - auto_test:
       name: 🇭🇰 香港节点
