@@ -53,18 +53,21 @@ direct_latency_test_url: "http://www.apple.com/library/test/success.html"
 dns:
   public_ip_lookup_url: "https://ifconfig.me/ip"
   proxy_nameservers:
+    # 系统 DNS 置顶，保障公共 Wi-Fi 验证页面秒弹窗
+    - system
+    # 本地极速 UDP 解析，保障机场节点 IP 秒速获取
     - 223.5.5.5
     - 119.29.29.29
-    - system
+    # 加密防污染兜底
     - h3://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
   bootstrap:
+    - system
     - 223.5.5.5
     - 119.29.29.29
-    - system
     - h3://dns.alidns.com/dns-query
     - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query  
+    - https://doh.pub/dns-query
   upstreams:
     AliDNS:
       - 223.5.5.5 
@@ -80,6 +83,10 @@ dns:
       - https://dns.alidns.com/dns-query
       - https://doh.pub/dns-query
     GlobalDNS:
+      # 域名级 DoH 优先 (充分利用你在规则里加的 domain 通道)
+      - https://cloudflare-dns.com/dns-query
+      - https://dns.google/dns-query
+      # IP 级 DoH 兜底 (充分利用你加的 1.1.1.1 和 8.8.8.8 通道)
       - https://1.1.1.1/dns-query
       - https://8.8.8.8/dns-query
     LocalDNS:
@@ -327,6 +334,23 @@ policy_groups:
 # 4. 黄金分流规则 (全系 Loyalsoldier list)
 # ------------------------------------------------------------------------------
 rules:
+  # === 0. 强制所有海外 DNS (IP 与 DoH) 走代理，彻底杜绝本地解析死锁 ===
+  # Cloudflare 体系
+  - ip_cidr: { match: "1.1.1.1/32", policy: 🌐 网络出口, no_resolve: true }
+  - ip_cidr: { match: "1.0.0.1/32", policy: 🌐 网络出口, no_resolve: true }
+  - domain: { match: "cloudflare-dns.com", policy: 🌐 网络出口 }
+  
+  # Google 体系
+  - ip_cidr: { match: "8.8.8.8/32", policy: 🌐 网络出口, no_resolve: true }
+  - ip_cidr: { match: "8.8.4.4/32", policy: 🌐 网络出口, no_resolve: true }
+  - domain: { match: "dns.google", policy: 🌐 网络出口 }
+  
+  # Quad9 与 OpenDNS 体系 (如果你未来用到)
+  - ip_cidr: { match: "9.9.9.9/32", policy: 🌐 网络出口, no_resolve: true }
+  - ip_cidr: { match: "149.112.112.112/32", policy: 🌐 网络出口, no_resolve: true }
+  - ip_cidr: { match: "208.67.222.222/32", policy: 🌐 网络出口, no_resolve: true }
+  - ip_cidr: { match: "208.67.220.220/32", policy: 🌐 网络出口, no_resolve: true }
+
   # === 1. 核心系统、局域网与苹果服务物理直连 (必须置顶！防止内网数据被代理引擎干扰与防苹果风控) ===
   - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/private.txt", policy: DIRECT, update_interval: 86400 }
   - ip_cidr: { match: "192.168.0.0/16", policy: DIRECT, no_resolve: true }
