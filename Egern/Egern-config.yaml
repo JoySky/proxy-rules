@@ -181,7 +181,7 @@ policy_groups:
       # ⚠️ 请在手机 Egern 端本地修改此处的真实订阅链接，多个订阅依次在下边添加
       urls:
         - "https://INSERT_YOUR_SUB_URL_HERE"
-       
+        
   # === 1. 顶层面板 ===
   - select:
       name: 🌐 网络出口
@@ -193,7 +193,7 @@ policy_groups:
         - 🤖 AI 策略
         - 🎯 直连策略
         
-   # === 2. AI 专属 ===
+  # === 2. AI 专属 ===
   - select:
       name: 🤖 AI 策略
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bot.png"
@@ -210,14 +210,14 @@ policy_groups:
       interval: 600
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available.png"
       policies:
-        - 🇭🇰 香港节点      
-        - 🇯🇵 日本节点      
-        - 🇸🇬 新加坡节点    
+        - 🇭🇰 香港节点
+        - 🇯🇵 日本节点
+        - 🇸🇬 新加坡节点
         - 🇹🇼 台湾节点
         - 🇰🇷 韩国节点
         - 🇺🇸 美国节点
         - 🌍 其他节点
-      
+        
   # === 4. 自动切换面板 ===
   - auto_test:
       name: 🚀 急速策略
@@ -232,7 +232,7 @@ policy_groups:
         - 🇰🇷 韩国节点
         - 🇺🇸 美国节点
         - 🌍 其他节点
-      
+        
   # === 5. 手动面板 ===
   - select:
       name: 🕹️ 手动策略
@@ -245,13 +245,14 @@ policy_groups:
         - 🇰🇷 韩国节点
         - 🇺🇸 美国节点
         - 🌍 其他节点
-      
+        
   # === 6. 直连策略 ===
   - select:
       name: 🎯 直连策略
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Direct.png"
       policies:
         - DIRECT
+
   # === 7. 漏网之鱼 ===
   - select:
       name: 🐟 漏网之鱼
@@ -262,7 +263,7 @@ policy_groups:
         - 🕹️ 手动策略
         - 🤖 AI 策略
         - 🎯 直连策略
-      
+        
   # === 8. 地区节点动态抓取 (引用总阀门 + 展开 + 过滤) ===
   - auto_test:
       name: 🇭🇰 香港节点
@@ -313,7 +314,7 @@ policy_groups:
       interval: 600
       tolerance: 100
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Korea.png"
- 
+      
   - auto_test:
       name: 🇺🇸 美国节点
       hidden: true
@@ -329,12 +330,10 @@ policy_groups:
       hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
-      # 核心魔法：使用 (?!.*) 反向正则，只要名字里包含括号里的任何一个词，瞬间剔除！
       filter: "(?i)^(?!.*(🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|🇰🇷|HK|TW|SG|JP|KR|US|香港|台湾|新加坡|日本|韩国|美国|到期|测试|通知|官网|剩余|流量|QQ群|TG群|更新|重置)).+$"
       interval: 600
       tolerance: 100
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/European_Union.png"
-
 
 # ------------------------------------------------------------------------------
 # 4. 黄金分流规则 (全系 Loyalsoldier list)
