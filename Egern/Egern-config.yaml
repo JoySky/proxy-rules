@@ -54,28 +54,24 @@ direct_latency_test_url: "http://www.apple.com/library/test/success.html"
 dns:
   public_ip_lookup_url: "https://ifconfig.me/ip"
   proxy_nameservers:
-  # 1. 阿里与腾讯的传统纯 IP UDP DNS (最强短跑冠军，0 延迟瞬间解析机场)
     - 223.5.5.5
     - 119.29.29.29
-  # 2. 系统的本地运营商 DNS ( system 关键字非常关键，直接读取你当前 Wi-Fi 或 5G 分配的默认 DNS)
     - system
-  # 3. 加密后备通道 (当前面的纯 IP 被运营商劫持或出故障时，用国内最顶级的加密 DoH 兜底)
     - h3://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
 
   bootstrap:
-    - system
     - 223.5.5.5
     - 119.29.29.29
+    - system
     - h3://dns.alidns.com/dns-query
     - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query    
+    - https://doh.pub/dns-query  
   upstreams:
     AliDNS:
       - 223.5.5.5 
       - h3://dns.alidns.com/dns-query
       - https://dns.alidns.com/dns-query
-
     DNSPod:
       - 119.29.29.29
       - https://doh.pub/dns-query
@@ -262,15 +258,14 @@ policy_groups:
   - auto_test:
       name: 🐟 漏网之鱼
       hidden: true
-      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png"
+      policies: [✈️ 机场订阅]
       interval: 600
       tolerance: 100
-      policies: [✈️ 机场订阅]
-      
+      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png"
+                  
   # === 8. 地区节点动态抓取 (引用总阀门 + 展开 + 过滤) ===
   - auto_test:
       name: 🇭🇰 香港节点
-      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇭🇰|HK|香港|HongKong"
@@ -280,7 +275,6 @@ policy_groups:
       
   - auto_test:
       name: 🇯🇵 日本节点
-      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇯🇵|JP|日本|Japan"
@@ -290,7 +284,6 @@ policy_groups:
       
   - auto_test:
       name: 🇸🇬 新加坡节点
-      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇸🇬|SG|新加坡|Singapore"
@@ -300,7 +293,6 @@ policy_groups:
       
   - auto_test:
       name: 🇹🇼 台湾节点
-      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇹🇼|TW|台湾|Taiwan"
@@ -310,7 +302,6 @@ policy_groups:
       
   - auto_test:
       name: 🇰🇷 韩国节点
-      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇰🇷|KR|韩国|Korea"
@@ -320,7 +311,6 @@ policy_groups:
       
   - auto_test:
       name: 🇺🇸 美国节点
-      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇺🇸|US|美国|America"
@@ -330,7 +320,6 @@ policy_groups:
       
   - auto_test:
       name: 🌍 其他节点
-      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)^(?!.*(🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇺🇸|🇰🇷|HK|TW|SG|JP|KR|US|香港|台湾|新加坡|日本|韩国|美国|到期|测试|通知|官网|剩余|流量|QQ群|TG群|更新|重置)).+$"
