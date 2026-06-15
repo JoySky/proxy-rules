@@ -107,7 +107,8 @@ dns:
     - domain: { match: "dns.alidns.com", value: LocalDNS }
     - domain: { match: "doh.pub", value: LocalDNS }
     - domain: { match: "cloudflare-dns.com", value: LocalDNS }
-    
+    - domain: { match: "dns.google", value: LocalDNS }
+
     # --- 2. 第二层：精准厂商投递硬编码 (保障国内核心 App 秒开) ---
     # 阿里系
     - domain_suffix: { match: "alibaba.com", value: AliDNS }
