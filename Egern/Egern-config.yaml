@@ -255,7 +255,6 @@ policy_groups:
   - select:
       name: 🐟 漏网之鱼
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png"
-      hidden: true
       policies:
         - 🛡️ 稳定模式
         - 🚀 自动模式
@@ -265,6 +264,7 @@ policy_groups:
   # === 8. 地区节点动态抓取 (引用总阀门 + 展开 + 过滤) ===
   - auto_test:
       name: 🇭🇰 香港节点
+      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇭🇰|HK|香港|HongKong"
@@ -274,6 +274,7 @@ policy_groups:
       
   - auto_test:
       name: 🇯🇵 日本节点
+      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇯🇵|JP|日本|Japan"
@@ -283,6 +284,7 @@ policy_groups:
       
   - auto_test:
       name: 🇸🇬 新加坡节点
+      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇸🇬|SG|新加坡|Singapore"
@@ -292,6 +294,7 @@ policy_groups:
       
   - auto_test:
       name: 🇹🇼 台湾节点
+      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇹🇼|TW|台湾|Taiwan"
@@ -301,6 +304,7 @@ policy_groups:
       
   - auto_test:
       name: 🇰🇷 韩国节点
+      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇰🇷|KR|韩国|Korea"
@@ -310,6 +314,7 @@ policy_groups:
  
   - auto_test:
       name: 🇺🇸 美国节点
+      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       filter: "(?i)🇺🇸|US|美国|America"
@@ -319,6 +324,7 @@ policy_groups:
       
   - auto_test:
       name: 🌍 其他节点
+      hidden: true
       policies: [✈️ 机场订阅]
       flatten: true
       # 核心魔法：使用 (?!.*) 反向正则，只要名字里包含括号里的任何一个词，瞬间剔除！
