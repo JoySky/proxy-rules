@@ -148,18 +148,18 @@ profile:
 # ----------------------------------------------------
 proxy-groups:
   # === 1. 顶层面板 (只留五个，极度清爽) ===
-  - name: 🌐 全局策略
+  - name: 🌐 网络出口
     type: select
     proxies:
-      - 🛡️ 稳定策略
-      - 🚀 极速策略
-      - 🕹️ 手动策略
-      - 🤖 AI 策略
-      - 🎯 直连策略
+      - 🛡️ 稳定连接
+      - 🚀 自动测速
+      - 🕹️ 手动选择
+      - 🤖 AI 通道
+      - 🎯 国内直连
 
  
   # === 2. 终极主路由：区域故障转移 ===
-  - name: 🛡️ 稳定策略
+  - name: 🛡️ 稳定连接
     type: fallback
     url: http://www.gstatic.com/generate_204
     interval: 300
@@ -173,7 +173,7 @@ proxy-groups:
       - 🌍 其他节点
 
   # === 3. 自动切换面板 ===
-  - name: 🚀 极速策略
+  - name: 🚀 自动测速
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
@@ -188,7 +188,7 @@ proxy-groups:
       - 🌍 其他节点
 
   # === 4. 手动面板 ===
-  - name: 🕹️ 手动策略
+  - name: 🕹️ 手动选择
     type: select
     proxies:
       - 🇭🇰 香港节点
@@ -200,7 +200,7 @@ proxy-groups:
       - 🌍 其他节点
       
   # === 5. AI 专属 (保持不变) ===
-  - name: 🤖 AI 策略
+  - name: 🤖 AI 通道
     type: select
     proxies:
       - 🇯🇵 日本节点
@@ -209,8 +209,8 @@ proxy-groups:
       - 🇹🇼 台湾节点
       - 🇰🇷 韩国节点
       
-  # === 6. 直连策略 ===
-  - name: 🎯 直连策略
+  # === 6. 国内直连 ===
+  - name: 🎯 国内直连
     type: select
     proxies:
       - DIRECT     
@@ -360,11 +360,11 @@ rule-providers:
 # ----------------------------------------------------
 rules:
   # --- 阶段零：AI 特权直达通道 (最高优先级，防风控) ---
-  - GEOSITE,openai,🤖 AI 策略
-  - GEOSITE,anthropic,🤖 AI 策略
-  - GEOSITE,google-gemini,🤖 AI 策略
-  - DOMAIN-SUFFIX,grok.com,🤖 AI 策略          # Grok 官网
-  - DOMAIN-SUFFIX,x.ai,🤖 AI 策略              # Grok 接口
+  - GEOSITE,openai,🤖 AI 通道
+  - GEOSITE,anthropic,🤖 AI 通道
+  - GEOSITE,google-gemini,🤖 AI 通道
+  - DOMAIN-SUFFIX,grok.com,🤖 AI 通道          # Grok 官网
+  - DOMAIN-SUFFIX,x.ai,🤖 AI 通道              # Grok 接口
   
   # --- 阶段一：应用、面板与测速直连 (防跑流量首选) ---
   - RULE-SET,applications,DIRECT               # 高并发应用直连 (如迅雷、BT)
@@ -377,11 +377,11 @@ rules:
   - RULE-SET,reject,REJECT                     # Loyalsoldier 广告与追踪器拦截
 
   # --- 阶段三：特定外网服务硬编码指向 (确保精确入轨) ---
-  - GEOSITE,github,🌐 全局策略
-  - GEOSITE,netflix,🌐 全局策略
-  - GEOSITE,reddit,🌐 全局策略
-  - GEOSITE,twitch,🌐 全局策略
-  - RULE-SET,google,🌐 全局策略                 # Google 全家桶
+  - GEOSITE,github,🌐 网络出口
+  - GEOSITE,netflix,🌐 网络出口
+  - GEOSITE,reddit,🌐 网络出口
+  - GEOSITE,twitch,🌐 网络出口
+  - RULE-SET,google,🌐 网络出口                 # Google 全家桶
   
   # --- 阶段四：特定外企服务直连 (微软与苹果，极度省流量) ---
   - RULE-SET,icloud,DIRECT
@@ -391,15 +391,15 @@ rules:
   - GEOSITE,microsoft,DIRECT                   # 微软全局直连 (涵盖 Windows 更新、Xbox 下载)
   
   # --- 阶段五：代理与直连名单分流 (Loyalsoldier 文本库兜底) ---
-  - RULE-SET,proxy,🌐 全局策略                  # 知名外网域名库
+  - RULE-SET,proxy,🌐 网络出口                  # 知名外网域名库
   - RULE-SET,direct,DIRECT                     # 知名国内域名库
   
   # --- 阶段六：底层 IP 防泄漏处理 (必须带 no-resolve) ---
   - RULE-SET,lancidr,DIRECT,no-resolve
   - RULE-SET,cncidr,DIRECT,no-resolve
-  - RULE-SET,telegramcidr,🌐 全局策略,no-resolve  
+  - RULE-SET,telegramcidr,🌐 网络出口,no-resolve  
   - GEOIP,LAN,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
   
   # --- 阶段七：终极漏网之鱼兜底 ---
-  - MATCH,🌐 全局策略                           # 不在以上所有规则内的流量，默认走代理
+  - MATCH,🌐 网络出口                           # 不在以上所有规则内的流量，默认走代理
