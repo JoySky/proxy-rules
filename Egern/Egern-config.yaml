@@ -164,11 +164,11 @@ dns:
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", value: GlobalDNS, update_interval: 86400 }
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", value: GlobalDNS, update_interval: 86400 }
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", value: GlobalDNS, update_interval: 86400 }
-    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", value: GlobalDNS, update_interval: 86400 }
     # 👇 新增：防 DNS 污染安全网，匹配境外顶级域名与被墙域名，强制走海外加密 DNS 解析
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/tld-not-cn.txt", value: GlobalDNS, update_interval: 86400 }
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt", value: GlobalDNS, update_interval: 86400 }
-    
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", value: GlobalDNS, update_interval: 86400 }
+
     # [最后匹配] 国内常规网站大盘
     - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt", value: ChinaDNS, update_interval: 86400 }
     
@@ -193,9 +193,16 @@ policy_groups:
   - auto_test:
       name: 🐟 漏网之鱼
       hidden: true
-      policies: [✈️ 机场订阅]
       interval: 600
       tolerance: 100
+      policies:
+        - 🇭🇰 香港节点
+        - 🇯🇵 日本节点
+        - 🇸🇬 新加坡节点
+        - 🇹🇼 台湾节点
+        - 🇰🇷 韩国节点
+        - 🇺🇸 美国节点
+        - 🌍 其他节点      
       
   # === 1. 顶层面板 ===
   - select:
