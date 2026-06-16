@@ -189,21 +189,7 @@ policy_groups:
       # ⚠️ 请在手机 Egern 端本地修改此处的真实订阅链接，多个订阅依次在下边添加
       urls:
         - "https://INSERT_YOUR_SUB_URL_HERE"
-  # === 兜底. 漏网之鱼 ===
-  - auto_test:
-      name: 🐟 漏网之鱼
-      hidden: true
-      interval: 600
-      tolerance: 100
-      policies:
-        - 🇭🇰 香港节点
-        - 🇯🇵 日本节点
-        - 🇸🇬 新加坡节点
-        - 🇹🇼 台湾节点
-        - 🇰🇷 韩国节点
-        - 🇺🇸 美国节点
-        - 🌍 其他节点      
-      
+
   # === 1. 顶层面板 ===
   - select:
       name: 🌐 网络出口
@@ -435,7 +421,7 @@ rules:
   - geoip: { match: "CN", policy: DIRECT }
   
   # === 10. 白名单终极兜底 (FINAL) ===
-  - default: { policy: 🐟 漏网之鱼 }
+  - default: { policy: 🌐 网络出口 }
 
 # ------------------------------------------------------------------------------
 # 5. 中间人攻击 (MITM) 配置
