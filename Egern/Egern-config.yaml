@@ -196,7 +196,7 @@ policy_groups:
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png"
       policies:
         - 🛡️ 稳定连接
-        - 🧠 智能优选
+        - 🧠 智能选优
         - 🕹️ 手动选择
         - 🤖 AI 通道
         - 🎯 国内直连
@@ -226,9 +226,9 @@ policy_groups:
         - 🇺🇸 美国节点
         - 🌍 其他节点
         
-  # === 4. 智能优选切换面板 ===
+  # === 4. 智能选优切换面板 ===
   - smart:
-      name: 🧠 智能优选
+      name: 🧠 智能选优
       icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png"
       policies:
         - 🇭🇰 香港节点
