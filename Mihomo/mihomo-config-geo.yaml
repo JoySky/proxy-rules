@@ -147,17 +147,17 @@ profile:
 # ----------------------------------------------------
 proxy-groups:
   # === 1. 顶层面板 (只留五个，极度清爽) ===
-  - name: 🌐 全局策略
+  - name: 🌐 网络出口
     type: select
     proxies:
-      - 🛡️ 稳定策略
-      - 🚀 极速策略
-      - 🕹️ 手动策略
-      - 🤖 AI 策略
-      - 🎯 直连策略
+      - 🛡️ 稳定连接
+      - 🚀 自动测速
+      - 🕹️ 手动选择
+      - 🤖 AI 通道
+      - 🎯 国内直连
 
   # === 2. 终极主路由：区域故障转移 ===
-  - name: 🛡️ 稳定策略
+  - name: 🛡️ 稳定连接
     type: fallback
     url: http://www.gstatic.com/generate_204
     interval: 300
@@ -171,7 +171,7 @@ proxy-groups:
       - 🌍 其他节点
 
   # === 3. 自动切换面板 ===
-  - name: 🚀 极速策略
+  - name: 🚀 自动测速
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
@@ -186,7 +186,7 @@ proxy-groups:
       - 🌍 其他节点
 
   # === 4. 手动面板 ===
-  - name: 🕹️ 手动策略
+  - name: 🕹️ 手动选择
     type: select
     proxies:
       - 🇭🇰 香港节点
@@ -198,7 +198,7 @@ proxy-groups:
       - 🌍 其他节点
       
   # === 5. AI 专属 (保持不变) ===
-  - name: 🤖 AI 策略
+  - name: 🤖 AI 通道
     type: select
     proxies:
       - 🇯🇵 日本节点
@@ -207,8 +207,8 @@ proxy-groups:
       - 🇹🇼 台湾节点
       - 🇰🇷 韩国节点
       
-  # === 6. 直连策略 ===
-  - name: 🎯 直连策略
+  # === 6. 国内直连 ===
+  - name: 🎯 国内直连
     type: select
     proxies:
       - DIRECT     
@@ -295,12 +295,12 @@ rule-providers:
 # ====================================================
 rules:
   # --- 阶段零：AI 专属定点分流 (最高特权，防拦截) ---
-  - GEOSITE,openai,🤖 AI 策略
-  - GEOSITE,anthropic,🤖 AI 策略
-  - GEOSITE,google-gemini,🤖 AI 策略
-  - DOMAIN-SUFFIX,grok.com,🤖 AI 策略          # Grok 官网
-  - DOMAIN-SUFFIX,x.ai,🤖 AI 策略              # Grok 接口
-  - DOMAIN-SUFFIX,bing.com,🤖 AI 策略          # 抢在微软全局直连前，将 Bing/Copilot 划入 AI
+  - GEOSITE,openai,🤖 AI 通道
+  - GEOSITE,anthropic,🤖 AI 通道
+  - GEOSITE,google-gemini,🤖 AI 通道
+  - DOMAIN-SUFFIX,grok.com,🤖 AI 通道          # Grok 官网
+  - DOMAIN-SUFFIX,x.ai,🤖 AI 通道              # Grok 接口
+  - DOMAIN-SUFFIX,bing.com,🤖 AI 通道          # 抢在微软全局直连前，将 Bing/Copilot 划入 AI
   
   # --- 阶段一：高并发、控制面板与测速直连 (防跑流量首选) ---
   - RULE-SET,applications,DIRECT               # 迅雷、BT 等高并发软件直接放行
@@ -312,10 +312,10 @@ rules:
   - RULE-SET,reject,REJECT                     # 强效拦截国内外追踪器与流氓广告
   
   # --- 阶段三：特定外网服务硬编码指向 (确保精确入轨) ---
-  - GEOSITE,github,🌐 全局策略
-  - GEOSITE,netflix,🌐 全局策略
-  - GEOSITE,reddit,🌐 全局策略
-  - GEOSITE,twitch,🌐 全局策略
+  - GEOSITE,github,🌐 网络出口
+  - GEOSITE,netflix,🌐 网络出口
+  - GEOSITE,reddit,🌐 网络出口
+  - GEOSITE,twitch,🌐 网络出口
   
   # --- 阶段四：GeoData 极速宏观直连接管 (免检通道) ---
   - GEOSITE,private,DIRECT                     # 局域网流量直连
@@ -326,9 +326,9 @@ rules:
   - GEOSITE,cn,DIRECT                          # 国内网站极速直连 (涵盖数十万个中国域名)
   
   # --- 阶段五：GeoData 外网全家桶与兜底 ---
-  - GEOSITE,google,🌐 全局策略
-  - GEOSITE,telegram,🌐 全局策略
-  - GEOSITE,geolocation-!cn,🌐 全局策略              # 非国内域名强制代理兜底 (Geolocation 完美排除法)
+  - GEOSITE,google,🌐 网络出口
+  - GEOSITE,telegram,🌐 网络出口
+  - GEOSITE,geolocation-!cn,🌐 网络出口              # 非国内域名强制代理兜底 (Geolocation 完美排除法)
   
   # --- 阶段六：底层 IP 规则防泄漏与兜底 (GEOIP) ---
   # 必须带 no-resolve，防止在这最后一步触发本地 DNS 真实解析导致运营商污染
@@ -337,4 +337,4 @@ rules:
   
   # --- 阶段七：终极网兜 ---
   # 不在以上任何规则内的未知冷门流量，统统扔给代理处理
-  - MATCH,🌐 全局策略
+  - MATCH,🌐 网络出口
