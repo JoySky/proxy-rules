@@ -39,7 +39,7 @@ hijack_dns:
 
 # 规则数据库
 # 只有中国IP
-geoip_db_url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-only-cn-private.mmdb"
+geoip_db_url: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-only-cn-private.mmdb"
 # 暂时用不到，后续使用再添加
 # asn_db_url: "https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb"
 
@@ -60,6 +60,7 @@ dns:
     - 119.29.29.29
     # 加密防污染兜底
     - h3://dns.alidns.com/dns-query
+    - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
   bootstrap:
     - system
@@ -94,8 +95,8 @@ dns:
 
   forward:
     # === 0. [去广告与内网] (光速斩断广告解析请求，省电省流) ===
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/reject.txt", value: reject, update_interval: 86400 }
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/private.txt", value: LocalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/reject.txt", value: reject, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/private.txt", value: LocalDNS, update_interval: 86400 }
 
     # --- 1. 第一层：局域网物理直连与防死锁 (绝对优先，防断网) ---
     - domain_suffix: { match: "local", value: LocalDNS }
@@ -155,21 +156,21 @@ dns:
     
     # --- 4. 第四层：Proxy 的引用 (💡 严格优化后的黄金顺序) ---
     # [优先匹配] 特殊国内厂商与苹果大盘 (防止被 AI 或代理规则误杀)
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/apple.txt", value: ChinaDNS, update_interval: 86400 }
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/icloud.txt", value: ChinaDNS, update_interval: 86400 }
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Speedtest/Speedtest.list", value: ChinaDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt", value: ChinaDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/icloud.txt", value: ChinaDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Speedtest/Speedtest.list", value: ChinaDNS, update_interval: 86400 }
     
     # [其次匹配] AI 高频规则库与海外被墙大盘
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/OpenAI/OpenAI.list", value: GlobalDNS, update_interval: 86400 }
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Claude/Claude.list", value: GlobalDNS, update_interval: 86400 }
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Gemini/Gemini.list", value: GlobalDNS, update_interval: 86400 }
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/proxy.txt", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", value: GlobalDNS, update_interval: 86400 }
     # 👇 新增：防 DNS 污染安全网，匹配境外顶级域名与被墙域名，强制走海外加密 DNS 解析
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/tld-not-cn.txt", value: GlobalDNS, update_interval: 86400 }
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/gfw.txt", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/tld-not-cn.txt", value: GlobalDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt", value: GlobalDNS, update_interval: 86400 }
     
     # [最后匹配] 国内常规网站大盘
-    - proxy_rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/direct.txt", value: ChinaDNS, update_interval: 86400 }
+    - proxy_rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt", value: ChinaDNS, update_interval: 86400 }
     
     # --- 5. 第五层：最终默认兜底 ---
     # 遇到.cn 顶级域名，不查库，直接光速交由国内解析
@@ -353,15 +354,15 @@ rules:
   #- ip_cidr: { match: "208.67.220.220/32", policy: 🌐 网络出口, no_resolve: true }
 
   # === 1. 核心系统、局域网与苹果服务物理直连 (必须置顶！防止内网数据被代理引擎干扰与防苹果风控) ===
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/private.txt", policy: DIRECT, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/private.txt", policy: DIRECT, update_interval: 86400 }
   - ip_cidr: { match: "192.168.0.0/16", policy: DIRECT, no_resolve: true }
   - ip_cidr: { match: "10.0.0.0/8", policy: DIRECT, no_resolve: true }
   - ip_cidr: { match: "172.16.0.0/12", policy: DIRECT, no_resolve: true }
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/apple.txt", policy: DIRECT, update_interval: 86400 }
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/icloud.txt", policy: DIRECT, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt", policy: DIRECT, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/icloud.txt", policy: DIRECT, update_interval: 86400 }
 
   # === 2. 垃圾焚烧炉 (Loyalsoldier 极限性能版) ===
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/reject.txt", policy: REJECT, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/reject.txt", policy: REJECT, update_interval: 86400 }
 
   # === 3. AI 特权与硬编码 (防误杀最高优先级) ===
   # 🍎 Apple (Siri、Apple Intelligence 及防风控组件)
@@ -391,37 +392,37 @@ rules:
   - domain_suffix: { match: "grok.com", policy: 🤖 AI 通道 }
   
   # === 4. AI 规则集 (Blackmatrix7 独立精调版) ===
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/OpenAI/OpenAI.list", policy: 🤖 AI 通道, update_interval: 86400 }
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Claude/Claude.list", policy: 🤖 AI 通道, update_interval: 86400 }
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Gemini/Gemini.list", policy: 🤖 AI 通道, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list", policy: 🤖 AI 通道, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list", policy: 🤖 AI 通道, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list", policy: 🤖 AI 通道, update_interval: 86400 }
 
   # === 5. VIP 直通车 (金融机构、阿里、微信、测速 - 防风控绝对直连) ===
-  # - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/BOC/BOC.list", policy: DIRECT, update_interval: 86400 }
-  # - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/ABC/ABC.list", policy: DIRECT, update_interval: 86400 }
-  # - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/ICBC/ICBC.list", policy: DIRECT, update_interval: 86400 }
-  # - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/CCB/CCB.list", policy: DIRECT, update_interval: 86400 }
-  # - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/BOCOM/BOCOM.list", policy: DIRECT, update_interval: 86400 }
-  # - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/PSBC/PSBC.list", policy: DIRECT, update_interval: 86400 }
-  # - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/CMB/CMB.list", policy: DIRECT, update_interval: 86400 }
-  # - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/CEB/CEB.list", policy: DIRECT, update_interval: 86400 }
-  # - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/CGB/CGB.list", policy: DIRECT, update_interval: 86400 }
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Alibaba/Alibaba.list", policy: DIRECT, update_interval: 86400 }
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/WeChat/WeChat.list", policy: DIRECT, update_interval: 86400 }
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Speedtest/Speedtest.list", policy: DIRECT, update_interval: 86400 }
+  # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/BOC/BOC.list", policy: DIRECT, update_interval: 86400 }
+  # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ABC/ABC.list", policy: DIRECT, update_interval: 86400 }
+  # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ICBC/ICBC.list", policy: DIRECT, update_interval: 86400 }
+  # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/CCB/CCB.list", policy: DIRECT, update_interval: 86400 }
+  # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/BOCOM/BOCOM.list", policy: DIRECT, update_interval: 86400 }
+  # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/PSBC/PSBC.list", policy: DIRECT, update_interval: 86400 }
+  # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/CMB/CMB.list", policy: DIRECT, update_interval: 86400 }
+  # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/CEB/CEB.list", policy: DIRECT, update_interval: 86400 }
+  # - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/CGB/CGB.list", policy: DIRECT, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Alibaba/Alibaba.list", policy: DIRECT, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/WeChat/WeChat.list", policy: DIRECT, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Speedtest/Speedtest.list", policy: DIRECT, update_interval: 86400 }
 
   # === 6. 防 DNS 污染安全网 (新增补充：境外/被墙域名强制代理，彻底剥夺本地 DNS 解析权) ===
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/telegramcidr.txt", policy: 🌐 网络出口, no_resolve: true, update_interval: 86400 }
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/tld-not-cn.txt", policy: 🌐 网络出口, no_resolve: true, update_interval: 86400 }
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/gfw.txt", policy: 🌐 网络出口, no_resolve: true, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/telegramcidr.txt", policy: 🌐 网络出口, no_resolve: true, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/tld-not-cn.txt", policy: 🌐 网络出口, no_resolve: true, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt", policy: 🌐 网络出口, no_resolve: true, update_interval: 86400 }
   
   # === 7. 国外代理 (按需添加 Proxy，排除 GFW) ===
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/proxy.txt", policy: 🌐 网络出口, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt", policy: 🌐 网络出口, update_interval: 86400 }
   
   # === 8. 国内大网兜底 (Loyalsoldier 极限查表性能版 direct.txt) ===
-  - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/direct.txt", policy: DIRECT, update_interval: 86400 }
+  - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt", policy: DIRECT, update_interval: 86400 }
   
   # 针对下方已有的 geoip，此处进行注释规避
-  # - rule_set: { match: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/ruleset/cncidr.txt", policy: DIRECT, no_resolve: true, update_interval: 86400 }
+  # - rule_set: { match: "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt", policy: DIRECT, no_resolve: true, update_interval: 86400 }
   
   # === 9. GeoIP 物理兜底 (终极防线) ===
   - geoip: { match: "CN", policy: DIRECT }
@@ -475,7 +476,7 @@ modules:
     update_interval: 86400
     enabled: true
   - name: AdvertisingLite
-    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rewrite/Surge/AdvertisingLite/AdvertisingLite.sgmodule
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/Surge/AdvertisingLite/AdvertisingLite.sgmodule
     update_interval: 86400
     enabled: true
   - name: YouTube.Enhance
