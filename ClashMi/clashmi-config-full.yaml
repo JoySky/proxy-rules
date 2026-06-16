@@ -99,17 +99,17 @@ profile:
 # ----------------------------------------------------
 proxy-groups:
   # === 1. 顶层面板 (只留五个，极度清爽) ===
-  - name: 🌐 全局策略
+  - name: 🌐 网络出口
     type: select
     proxies:
-      - 🛡️ 稳定策略
-      - 🚀 极速策略
-      - 🕹️ 手动策略
-      - 🤖 AI 策略
-      - 🎯 直连策略
+      - 🛡️ 稳定连接
+      - 🚀 自动测速
+      - 🕹️ 手动选择
+      - 🤖 AI 通道
+      - 🎯 国内直连
 
   # === 2. 终极主路由：区域故障转移 ===
-  - name: 🛡️ 稳定策略
+  - name: 🛡️ 稳定连接
     type: fallback
     url: http://www.gstatic.com/generate_204
     interval: 600
@@ -123,7 +123,7 @@ proxy-groups:
       - 🌍 其他节点
       
  # === 3. 自动切换面板 ===
-  - name: 🚀 极速策略
+  - name: 🚀 自动测速
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 600
@@ -139,7 +139,7 @@ proxy-groups:
       - 🌍 其他节点
       
   # === 4. 手动面板 ===
-  - name: 🕹️ 手动策略
+  - name: 🕹️ 手动选择
     type: select
     proxies:
       - 🇭🇰 香港节点
@@ -151,7 +151,7 @@ proxy-groups:
       - 🌍 其他节点
   
   # === 5. AI 专属 ===
-  - name: 🤖 AI 策略
+  - name: 🤖 AI 通道
     type: select
     proxies:
       - 🇯🇵 日本节点
@@ -160,8 +160,8 @@ proxy-groups:
       - 🇹🇼 台湾节点
       - 🇰🇷 韩国节点
       
-  # === 6. 直连策略 ===    
-  - name: 🎯 直连策略
+  # === 6. 国内直连 ===    
+  - name: 🎯 国内直连
     type: select
     proxies:
       - DIRECT
@@ -299,26 +299,26 @@ rules:
   # --- 阶段一：强制硬编码层 (仅保留无外部库 或 必须越权覆盖的例外) ---
   
   # 1. 越权覆盖层：官方 apple 默认走直连。为防推送漏接与 Apple AI 宕机，在此硬编码截胡
-  - DOMAIN-SUFFIX,push.apple.com,🌐 全局策略
-  - DOMAIN-SUFFIX,apple-relay.apple.com,🤖 AI 策略
-  - DOMAIN-SUFFIX,cdn-smoot.apple.com,🤖 AI 策略
-  - DOMAIN-SUFFIX,smoot.apple.com,🤖 AI 策略
-  - DOMAIN,gspe1-ssl.ls.apple.com,🤖 AI 策略
-  - DOMAIN-KEYWORD,apple-relay,🤖 AI 策略
-  - DOMAIN,guzzoni.apple.com,🤖 AI 策略
+  - DOMAIN-SUFFIX,push.apple.com,🌐 网络出口
+  - DOMAIN-SUFFIX,apple-relay.apple.com,🤖 AI 通道
+  - DOMAIN-SUFFIX,cdn-smoot.apple.com,🤖 AI 通道
+  - DOMAIN-SUFFIX,smoot.apple.com,🤖 AI 通道
+  - DOMAIN,gspe1-ssl.ls.apple.com,🤖 AI 通道
+  - DOMAIN-KEYWORD,apple-relay,🤖 AI 通道
+  - DOMAIN,guzzoni.apple.com,🤖 AI 通道
   
   # 2. 缺失独立二进制库的硬编码补充
   # Copilot：官方无独立库，混在 microsoft 内，必须硬编码精准提取
-  - DOMAIN-KEYWORD,copilot,🤖 AI 策略
+  - DOMAIN-KEYWORD,copilot,🤖 AI 通道
   # (注意：xAI 官方已有 xai.mrs，已转入阶段二接管，不再硬编码)
 
   # --- 阶段二：二进制规则管控 (核心 AI 与防耗流) ---
   
   # 1. 有独立规则库的 AI 工具精准分流
-  - RULE-SET,openai,🤖 AI 策略
-  - RULE-SET,anthropic,🤖 AI 策略
-  - RULE-SET,gemini,🤖 AI 策略  
-  - RULE-SET,xai,🤖 AI 策略
+  - RULE-SET,openai,🤖 AI 通道
+  - RULE-SET,anthropic,🤖 AI 通道
+  - RULE-SET,gemini,🤖 AI 通道  
+  - RULE-SET,xai,🤖 AI 通道
   
   # 2. 测速软件强制直连 (保护机场节点流量)
   - RULE-SET,speedtest,DIRECT
@@ -333,21 +333,21 @@ rules:
 
   # --- 阶段四：国际社交、流媒体与核心开发 (从 Stash 迁移并使用二进制) ---
   
-  - RULE-SET,github,🌐 全局策略
-  - RULE-SET,youtube,🌐 全局策略
-  - RULE-SET,google,🌐 全局策略
-  - RULE-SET,telegram,🌐 全局策略
-  - RULE-SET,twitter,🌐 全局策略
-  - RULE-SET,netflix,🌐 全局策略
+  - RULE-SET,github,🌐 网络出口
+  - RULE-SET,youtube,🌐 网络出口
+  - RULE-SET,google,🌐 网络出口
+  - RULE-SET,telegram,🌐 网络出口
+  - RULE-SET,twitter,🌐 网络出口
+  - RULE-SET,netflix,🌐 网络出口
 
   # --- 阶段五：宏观接管与精简兜底 ---
   
   # 1. 国内网站极速直连
   - RULE-SET,cn_domain,DIRECT
   # 2. 全球非中国域名宽泛兜底 (完美替代且覆盖 proxy_domain)
-  - RULE-SET,geolocation-!cn,🌐 全局策略
+  - RULE-SET,geolocation-!cn,🌐 网络出口
   # 3. 国内 IP 兜底 (带 no-resolve 防 DNS 污染)
   - RULE-SET,cn_ip,DIRECT,no-resolve
   
   # --- 阶段六：终极网兜 ---
-  - MATCH,🌐 全局策略
+  - MATCH,🌐 网络出口
