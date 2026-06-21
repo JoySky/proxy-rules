@@ -1,0 +1,65 @@
+{
+  "colors" : {
+    "accent" : {
+      "dark" : "#389FD6",
+      "light" : "#2675BF"
+    },
+    "background" : {
+      "dark" : "#2B2B2B",
+      "light" : "#F2F2F7"
+    },
+    "blue" : {
+      "dark" : "#6897BB",
+      "light" : "#2675BF"
+    },
+    "cyan" : {
+      "dark" : "#56B6C2",
+      "light" : "#0073A8"
+    },
+    "green" : {
+      "dark" : "#6A8759",
+      "light" : "#1B801B"
+    },
+    "groupedBackground" : {
+      "dark" : "#2B2B2B",
+      "light" : "#F2F2F7"
+    },
+    "indigo" : {
+      "dark" : "#A9B7C6",
+      "light" : "#445582"
+    },
+    "orange" : {
+      "dark" : "#CC7832",
+      "light" : "#D27B00"
+    },
+    "purple" : {
+      "dark" : "#9876AA",
+      "light" : "#660E7A"
+    },
+    "red" : {
+      "dark" : "#FF6B68",
+      "light" : "#D12431"
+    },
+    "secondaryGroupedBackground" : {
+      "dark" : "#313335",
+      "light" : "#FFFFFF"
+    },
+    "tabBarBackground" : {
+      "dark" : "#313335",
+      "light" : "#FFFFFF"
+    },
+    "teal" : {
+      "dark" : "#539480",
+      "light" : "#007A7A"
+    },
+    "tertiaryGroupedBackground" : {
+      "dark" : "#3C3F41",
+      "light" : "#FFFFFF"
+    },
+    "yellow" : {
+      "dark" : "#FFC66D",
+      "light" : "#F0A732"
+    }
+  },
+  "name" : "Darcula Pro"
+}
